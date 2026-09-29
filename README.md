@@ -73,21 +73,30 @@ environment (see `.env.example`):
 Without SMTP settings the form shows a message asking visitors to telephone or email instead.
 Protections: server-side validation, honeypot field, per-IP rate limit, optional Turnstile.
 
-## Deployment (Vercel, free Hobby plan)
+## Deployment (Netlify, free plan)
 
-1. Sign in at <https://vercel.com> with the GitHub account that owns this repository.
-2. **Add New → Project**, pick `Advocate-Rajesh-Thosar-Website`, keep the detected Next.js settings, and in
-   **Settings → Git** set the production branch to the branch holding this code.
-3. Under **Settings → Environment Variables** add the contact-form settings, then redeploy.
-   With Gmail: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER=<gmail address>`,
+Netlify's free plan allows commercial sites. (Vercel's free Hobby plan is for personal, non-commercial use
+only; on Vercel, use the Pro plan.) Build settings are in `netlify.toml`, and Netlify adds its Next.js
+runtime automatically.
+
+1. Sign in at <https://app.netlify.com> with the GitHub account that owns this repository.
+2. **Add new project → Import an existing project → GitHub**, allow access to
+   `Advocate-Rajesh-Thosar-Website`, and select it.
+3. Branch to deploy: the branch holding this code. Leave the build settings as detected (they come from
+   `netlify.toml`). Choose a project name, e.g. `advocate-rajesh-thosar`; the site address becomes
+   `https://<project-name>.netlify.app`. Click **Deploy**.
+4. Contact form email: **Project configuration → Environment variables → Add a variable**, then
+   **Deploys → Trigger deploy**. With Gmail:
+   `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER=<gmail address>`,
    `SMTP_PASS=<a Google "App password", not the normal password>`, `CONTACT_TO=<address that receives enquiries>`.
-   (App passwords require 2-Step Verification on the Google account.)
-4. The site is then live at `https://<project>.vercel.app`; until a domain is set, canonical URLs and the
-   sitemap use that address automatically.
-5. After buying a `.com`/`.in` domain: **Settings → Domains → Add**, create the DNS records Vercel shows at the
-   registrar, and set `NEXT_PUBLIC_SITE_URL=https://<domain>`.
+   Leave `CONTACT_FROM` unset so mail is sent from the Gmail address. App passwords require 2-Step
+   Verification on the Google account. Send yourself a test enquiry afterwards.
+5. Canonical links, the sitemap and social previews use Netlify's site address automatically. After adding a
+   custom domain (**Domain management → Add a domain**), redeploy once so they switch to the domain.
+6. Optional spam protection: create a free Cloudflare Turnstile widget for the domain and add
+   `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`, then redeploy.
 
-Any Node host also works (`npm run build && npm start`).
+Any Node host also works (`npm run build && npm start`); set `NEXT_PUBLIC_SITE_URL` there.
 
 Security headers (CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy) are set in `next.config.ts`.
 

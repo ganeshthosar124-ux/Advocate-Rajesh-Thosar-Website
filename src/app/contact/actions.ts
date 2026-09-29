@@ -21,16 +21,32 @@ function rateLimited(ip: string | null) {
   return recent.length > MAX_PER_WINDOW;
 }
 
-async function verifyTurnstile(token: string, ip: string | null) {
+// Hosting functions are stopped after about 10 seconds (Netlify's default), so
+// every outside call below has a timeout that keeps the total well within it.
+const TURNSTILE_TIMEOUT_MS = 3000;
+const SMTP_TIMEOUTS = { connectionTimeout: 4000, greetingTimeout: 4000, socketTimeout: 6000 };
+
+// A complete, valid enquiry submitted this soon after the page loaded is
+// treated as automated.
+const MIN_SECONDS_ON_FORM = 3;
+
+async function verifyTurnstile(token: string, ip: string | null): Promise<"ok" | "failed" | "unavailable"> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true; // Turnstile not configured
-  if (!token) return false;
-  const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-    method: "POST",
-    body: new URLSearchParams({ secret, response: token, ...(ip ? { remoteip: ip } : {}) }),
-  });
-  const data = (await res.json()) as { success?: boolean };
-  return data.success === true;
+  if (!secret) return "ok"; // Turnstile not configured
+  if (!token) return "failed";
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: new URLSearchParams({ secret, response: token, ...(ip ? { remoteip: ip } : {}) }),
+      signal: AbortSignal.timeout(TURNSTILE_TIMEOUT_MS),
+    });
+    if (!res.ok) return "unavailable";
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true ? "ok" : "failed";
+  } catch (err) {
+    console.error("Contact form: spam check could not be verified", err);
+    return "unavailable";
+  }
 }
 
 function escapeHtml(s: string) {
@@ -40,9 +56,9 @@ function escapeHtml(s: string) {
 const SENT = "Thank you. Your enquiry has been sent and the office will respond by email.";
 
 export async function sendEnquiry(_prev: ContactState, formData: FormData): Promise<ContactState> {
-  // Honeypot: real visitors never see or fill this field.
-  // Answer exactly as for a real send so bots learn nothing.
-  if (formData.get("company")) return { status: "success", message: SENT };
+  // Spam trap: real visitors never see or fill this field. Answer exactly as
+  // for a real send so bots learn nothing.
+  if (formData.get("leave_this_blank")) return { status: "success", message: SENT };
 
   const h = await headers();
   const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip")?.trim() || null;
@@ -69,13 +85,24 @@ export async function sendEnquiry(_prev: ContactState, formData: FormData): Prom
     return fail("Please correct the highlighted fields.", errors);
   }
 
+  // Checked only after validation, so a visitor who submits too quickly still
+  // sees what needs correcting. Missing (e.g. no JavaScript) means not checked.
+  const elapsed = formData.get("form_elapsed");
+  if (typeof elapsed === "string" && elapsed !== "" && Number(elapsed) < MIN_SECONDS_ON_FORM) {
+    return { status: "success", message: SENT };
+  }
+
   // Counted only for valid submissions, so correcting typos never locks anyone out.
   if (rateLimited(ip)) {
     return fail("Too many enquiries were sent from your connection. Please try again later.");
   }
 
-  if (!(await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""), ip))) {
-    return fail("The spam check failed. Please reload the page and try again.");
+  const spamCheck = await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""), ip);
+  if (spamCheck === "failed") {
+    return fail("The spam check did not succeed. Please complete it again and resend.");
+  }
+  if (spamCheck === "unavailable") {
+    return fail("The spam check could not be completed. Please try again, or contact the office by telephone or email.");
   }
 
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, CONTACT_FROM, CONTACT_TO } = process.env;
@@ -91,6 +118,7 @@ export async function sendEnquiry(_prev: ContactState, formData: FormData): Prom
       host: SMTP_HOST,
       port: Number(SMTP_PORT || 587),
       secure: Number(SMTP_PORT) === 465,
+      ...SMTP_TIMEOUTS,
       auth: SMTP_USER ? { user: SMTP_USER, pass: SMTP_PASS } : undefined,
     });
     await transport.sendMail({

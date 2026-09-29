@@ -3,7 +3,7 @@ import { LegalPage } from "@/components/sections/LegalPage";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-// DRAFT wording: to be reviewed and approved by the advocate before launch.
+// Wording chosen as a reasonable default; the advocate should review it.
 
 export const metadata = pageMetadata({
   title: "Terms of Use",
@@ -13,7 +13,7 @@ export const metadata = pageMetadata({
 
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms of Use" path="/terms-of-use" updated="[Date of approval]">
+    <LegalPage title="Terms of Use" path="/terms-of-use" updated="29 September 2026">
       <p>By using this website you agree to the following terms.</p>
 
       <h2>Information only</h2>
@@ -42,7 +42,10 @@ export default function TermsPage() {
       <p>These terms may be updated from time to time. The date above shows when they were last revised.</p>
 
       <h2>Governing law</h2>
-      <p>[Governing law and jurisdiction clause to be confirmed by the advocate.]</p>
+      <p>
+        These terms are governed by the laws of India. Any dispute arising from the use of this website is subject to
+        the jurisdiction of the courts at Thane, Maharashtra.
+      </p>
     </LegalPage>
   );
 }

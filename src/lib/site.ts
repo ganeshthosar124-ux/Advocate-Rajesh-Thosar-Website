@@ -2,10 +2,13 @@ import siteData from "@content/site.json";
 
 export const site = siteData;
 
-// NEXT_PUBLIC_SITE_URL is the final domain. Until one is set, fall back to the
-// Vercel production URL (set automatically by Vercel), then localhost.
+// The site's public address, used for canonical links, the sitemap, social
+// previews and structured data. NEXT_PUBLIC_SITE_URL wins when set; otherwise
+// the host's own variable is used: URL on Netlify (the main site address, also
+// on deploy previews) or VERCEL_PROJECT_PRODUCTION_URL on Vercel.
 export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.URL ||
   (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "") ||
   "http://localhost:3000"
 ).replace(/\/$/, "");

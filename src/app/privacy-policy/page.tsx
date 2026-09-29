@@ -2,8 +2,8 @@ import { LegalPage } from "@/components/sections/LegalPage";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-// DRAFT wording: to be reviewed and approved (including against current data
-// protection law) by the advocate before launch.
+// Wording chosen as a reasonable default; the advocate should review it
+// (including against current data protection law).
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
@@ -13,7 +13,7 @@ export const metadata = pageMetadata({
 
 export default function PrivacyPolicyPage() {
   return (
-    <LegalPage title="Privacy Policy" path="/privacy-policy" updated="[Date of approval]">
+    <LegalPage title="Privacy Policy" path="/privacy-policy" updated="29 September 2026">
       <p>
         This notice explains what personal data this website collects, why, and how it is handled. It applies only
         to this website.
@@ -27,13 +27,13 @@ export default function PrivacyPolicyPage() {
         </li>
         <li>
           <strong>Technical data:</strong> the hosting provider may record standard server logs (such as IP address,
-          browser type and pages requested) for security and to keep the site running.
+          browser type and pages requested) for security and to keep the site running. When the enquiry form is
+          submitted, your IP address is also used briefly to limit repeated submissions; it is not stored.
         </li>
       </ul>
       <p>
-        This website does not use advertising or tracking cookies. It sets one functional cookie, which
-        remembers for the current browser session that you have accepted the disclaimer. [If privacy-friendly analytics are enabled, name
-        the service here and state that it does not use cookies or identify individual visitors.]
+        This website does not use analytics, advertising or tracking cookies. It sets one functional cookie, which
+        remembers for the current browser session that you have accepted the disclaimer.
       </p>
 
       <h2>Why we use it</h2>
@@ -50,11 +50,15 @@ export default function PrivacyPolicyPage() {
       </p>
 
       <h2>Retention</h2>
-      <p>[State how long enquiry emails are kept, e.g. deleted after a set period if no engagement follows.]</p>
+      <p>
+        Enquiry emails are kept for up to 12 months after the last communication about the enquiry and are then
+        deleted. If an enquiry leads to an engagement, the correspondence becomes part of the matter file and is kept
+        for as long as professional or legal obligations require.
+      </p>
 
       <h2>Third-party services</h2>
       <ul>
-        <li>Vercel, which hosts this website</li>
+        <li>Netlify, which hosts this website</li>
         <li>Google (Gmail), which delivers enquiry emails to the office</li>
         <li>Cloudflare Turnstile, if enabled, to protect the form from spam</li>
         <li>Google Maps, only if you choose to load the map on the Contact page</li>

@@ -49,7 +49,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${cormorant.variable} ${manrope.variable}`}>
+    // data-scroll-behavior lets Next.js turn smooth scrolling off during page
+    // transitions, so a new page opens at the top instead of gliding up to it.
+    <html lang="en-IN" data-scroll-behavior="smooth" className={`${cormorant.variable} ${manrope.variable}`}>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#main"

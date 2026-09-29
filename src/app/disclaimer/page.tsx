@@ -2,7 +2,7 @@ import { LegalPage } from "@/components/sections/LegalPage";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-// DRAFT wording: to be reviewed and approved by the advocate before launch.
+// Wording chosen as a reasonable default; the advocate should review it.
 
 export const metadata = pageMetadata({
   title: "Disclaimer",
@@ -12,7 +12,7 @@ export const metadata = pageMetadata({
 
 export default function DisclaimerPage() {
   return (
-    <LegalPage title="Disclaimer" path="/disclaimer" updated="[Date of approval]">
+    <LegalPage title="Disclaimer" path="/disclaimer" updated="29 September 2026">
       <p>
         The Bar Council of India does not permit advocates to solicit work or advertise. This website is maintained
         to provide information about {site.fullName} to persons who seek it of their own accord.

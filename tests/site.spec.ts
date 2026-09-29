@@ -27,6 +27,9 @@ test.describe("every page", () => {
       await expect(page.locator("h1")).toHaveCount(1);
       await expect(page).toHaveTitle(/Rajesh A\. Thosar/);
 
+      // No unfinished placeholder text such as "[Date of approval]".
+      expect(await page.locator("body").innerText()).not.toMatch(/\[[A-Z][^\]]{6,}\]/);
+
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow).toBeLessThanOrEqual(0);
 
@@ -62,6 +65,29 @@ test("contact form reports validation errors and keeps what was typed", async ({
   await expect(page.getByLabel("Name")).toHaveAttribute("aria-invalid", "true");
   await expect(page.getByLabel("Subject")).toHaveValue("Property query");
   await expect(page.getByLabel("Message")).toHaveValue("Details of the enquiry go here.");
+});
+
+test("spam trap field cannot be filled by browser autofill", async ({ page }) => {
+  await acceptDisclaimer(page);
+  await page.goto("/contact");
+  await expect(page.locator('input[name="company"]')).toHaveCount(0);
+  const trap = page.locator('input[name="leave_this_blank"]');
+  await expect(trap).toHaveAttribute("autocomplete", "off");
+  await expect(trap).toHaveAttribute("tabindex", "-1");
+});
+
+test("if the connection drops while sending, the form explains and keeps the input", async ({ page }) => {
+  await acceptDisclaimer(page);
+  await page.goto("/contact");
+  await page.getByLabel("Subject").fill("Property query");
+  await page.getByLabel("Message").fill("Details of the enquiry go here.");
+  // Simulate the connection dropping while the enquiry is being sent.
+  await page.route("**/contact", (route) => (route.request().method() === "POST" ? route.abort() : route.continue()));
+  await page.getByRole("button", { name: "Send enquiry" }).click();
+  await expect(page.locator("form [role=alert]")).toContainText("connection was interrupted");
+  await expect(page.getByLabel("Subject")).toHaveValue("Property query");
+  await expect(page.getByLabel("Message")).toHaveValue("Details of the enquiry go here.");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Contact the Office");
 });
 
 test("mobile menu opens over the page, traps the background and navigates", async ({ page, isMobile }) => {
@@ -102,6 +128,31 @@ test.describe("with animations enabled", () => {
     await page.goBack();
     await page.waitForTimeout(500);
     expect(await scrollThrough()).toBe(0);
+  });
+
+  test("pages opened from the footer start at the top (no scroll animation)", async ({ page, isMobile }) => {
+    test.skip(isMobile, "desktop check is enough; same code path");
+    await acceptDisclaimer(page);
+    await page.goto("/");
+    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }));
+    await page.waitForTimeout(400);
+    await page.evaluate(() => {
+      const w = window as unknown as { __samples: [string, number][] };
+      w.__samples = [];
+      const t0 = performance.now();
+      const tick = () => {
+        w.__samples.push([location.pathname, window.scrollY]);
+        if (performance.now() - t0 < 1200) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+    await page.locator("footer").getByRole("link", { name: "Courts", exact: true }).click();
+    await expect(page).toHaveURL(/\/courts$/);
+    await page.waitForTimeout(1300);
+    const samples = await page.evaluate(() => (window as unknown as { __samples: [string, number][] }).__samples);
+    const onNewPage = samples.filter(([path]) => path === "/courts");
+    expect(onNewPage.length).toBeGreaterThan(5);
+    expect(onNewPage.filter(([, y]) => y > 0).length).toBe(0);
   });
 
   test("first-screen content is never hidden waiting for animation", async ({ page }) => {

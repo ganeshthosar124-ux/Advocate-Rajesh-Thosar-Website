@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Script from "next/script";
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { sendEnquiry } from "./actions";
+import { Turnstile } from "./Turnstile";
 import type { ContactFieldErrors, ContactState } from "@/lib/contact-schema";
 
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -42,10 +42,46 @@ function Field({
   );
 }
 
+// If the request itself fails (e.g. the connection drops), keep the visitor's
+// input and explain, instead of letting the error replace the page.
+async function submitEnquiry(prev: ContactState, formData: FormData): Promise<ContactState> {
+  try {
+    return await sendEnquiry(prev, formData);
+  } catch {
+    const text = (k: string) => String(formData.get(k) ?? "");
+    return {
+      status: "error",
+      message:
+        "Your enquiry could not be sent because the connection was interrupted. Please check your internet connection and try again, or contact the office by telephone or email.",
+      values: {
+        name: text("name"),
+        email: text("email"),
+        phone: text("phone"),
+        subject: text("subject"),
+        message: text("message"),
+        consent: formData.get("consent") === "on",
+      },
+    };
+  }
+}
+
 export function ContactForm() {
-  const [state, formAction, pending] = useActionState<ContactState, FormData>(sendEnquiry, { status: "idle" });
+  const [state, formAction, pending] = useActionState<ContactState, FormData>(submitEnquiry, { status: "idle" });
   const statusRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const waitingForSpamCheck = Boolean(turnstileSiteKey) && !turnstileToken;
+
+  // Time on the form, sent with each submission: a complete enquiry sent within
+  // a couple of seconds of the page loading is almost certainly automated.
+  const mountedAt = useRef(0);
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
+  function recordElapsed(e: React.FormEvent<HTMLFormElement>) {
+    const field = e.currentTarget.elements.namedItem("form_elapsed");
+    if (field instanceof HTMLInputElement) field.value = String(Math.round((Date.now() - mountedAt.current) / 1000));
+  }
 
   useEffect(() => {
     if (state.status === "idle") return;
@@ -58,7 +94,7 @@ export function ContactForm() {
   const v = state.status === "error" ? (state.values ?? {}) : {};
 
   return (
-    <form ref={formRef} action={formAction} noValidate className="space-y-6">
+    <form ref={formRef} action={formAction} onSubmit={recordElapsed} noValidate className="space-y-6">
       <div
         ref={statusRef}
         tabIndex={-1}
@@ -96,13 +132,24 @@ export function ContactForm() {
         {(p) => <textarea {...p} defaultValue={v.message} name="message" rows={6} required maxLength={2000} className={inputClass} />}
       </Field>
 
-      {/* Honeypot field, hidden from people and assistive technology */}
+      {/* Spam trap, hidden from people and assistive technology. Its name and
+          label deliberately match nothing that browsers or password managers
+          autofill, so real visitors never fill it by accident. */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label>
-          Company
-          <input name="company" type="text" tabIndex={-1} autoComplete="off" />
+          Leave this field empty
+          <input
+            name="leave_this_blank"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            data-1p-ignore
+            data-lpignore="true"
+            data-bwignore
+          />
         </label>
       </div>
+      <input type="hidden" name="form_elapsed" defaultValue="" />
 
       <div>
         <label className="flex items-start gap-3 text-sm">
@@ -132,18 +179,24 @@ export function ContactForm() {
 
       {turnstileSiteKey && (
         <>
-          <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-          <div className="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="light" />
+          <Turnstile siteKey={turnstileSiteKey} resetKey={state} onToken={setTurnstileToken} />
+          <input type="hidden" name="cf-turnstile-response" value={turnstileToken} />
         </>
       )}
 
       <button
         type="submit"
-        disabled={pending}
+        disabled={pending || waitingForSpamCheck}
+        aria-describedby={waitingForSpamCheck ? "spam-check-note" : undefined}
         className="inline-flex min-h-13 w-full items-center justify-center gap-3 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold tracking-wide text-ivory transition-colors hover:bg-ink-700 disabled:opacity-60 sm:w-auto"
       >
         {pending ? "Sending…" : "Send enquiry"}
       </button>
+      {waitingForSpamCheck && (
+        <p id="spam-check-note" className="text-sm text-muted">
+          The button becomes available once the quick spam check above is complete.
+        </p>
+      )}
     </form>
   );
 }
