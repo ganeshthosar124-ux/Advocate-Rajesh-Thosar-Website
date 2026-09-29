@@ -1,24 +1,27 @@
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { ContactDetails } from "@/components/sections/ContactDetails";
-import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/ui/JsonLd";
+import { getPracticeAreas } from "@/lib/content";
+import { legalServiceJsonLd, pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { ContactForm } from "./ContactForm";
 import { MapEmbed } from "./MapEmbed";
 
 export const metadata = pageMetadata({
-  title: "Contact",
-  description: `Office address, telephone, WhatsApp, email and enquiry form for ${site.name}, ${site.office.city}.`,
+  title: `Contact the Office in ${site.office.city}, ${site.office.district}`,
+  description: `Contact ${site.name}: office at ${site.office.line1}, ${site.office.line2}, ${site.office.city} ${site.office.pincode}. Telephone, WhatsApp, email or enquiry form.`,
   path: "/contact",
 });
 
 export default function ContactPage() {
   return (
     <>
+      <JsonLd data={legalServiceJsonLd(getPracticeAreas())} />
       <PageHeader
-        title="Contact"
-        eyebrow="Office"
-        intro="You may telephone, send a WhatsApp message or email the office, or send an enquiry using the form below."
+        title="Contact the Office"
+        eyebrow={`Office · ${site.office.city}`}
+        intro={`The office is at ${site.office.line1}, ${site.office.line2}, ${site.office.city} – ${site.office.pincode}, open ${site.contact.days}, ${site.contact.hours}. You may telephone, send a WhatsApp message or email, or use the enquiry form below.`}
         crumbs={[{ name: "Contact", path: "/contact" }]}
       />
       <Section tone="white" labelledBy="details-title">

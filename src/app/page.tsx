@@ -11,11 +11,11 @@ import { PracticeGrid } from "@/components/sections/PracticeGrid";
 import { CourthouseArt } from "@/components/sections/CourthouseArt";
 import { ContactPanel } from "@/components/sections/ContactPanel";
 import { formatDate, getArticles, getPracticeAreas } from "@/lib/content";
-import { pageMetadata, personJsonLd } from "@/lib/seo";
+import { legalServiceJsonLd, pageMetadata, personJsonLd, websiteJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: `${site.name} | Advocate, ${site.office.city}, ${site.office.district}`,
+  title: `${site.name} | Advocate in ${site.office.city}, ${site.office.district}`,
   absoluteTitle: true,
   description: site.shortDescription,
   path: "/",
@@ -36,7 +36,9 @@ export default function HomePage() {
 
   return (
     <>
-      <JsonLd data={personJsonLd()} />
+      <JsonLd data={websiteJsonLd()} />
+      <JsonLd data={legalServiceJsonLd(areas)} />
+      <JsonLd data={personJsonLd(areas)} />
 
       <Hero
         facts={[
@@ -147,13 +149,16 @@ export default function HomePage() {
             <ul className="border-t border-white/10">
               {site.courts.map((court, i) => (
                 <li key={court.name} data-reveal style={{ "--reveal-delay": i * 80 } as React.CSSProperties}>
-                  <div className="group grid grid-cols-[3rem_1fr] items-baseline gap-4 border-b border-white/10 py-6 transition-colors hover:bg-white/[0.03] sm:grid-cols-[4rem_1fr]">
+                  <Link
+                    href={`/courts#${court.id}`}
+                    className="group grid grid-cols-[3rem_1fr] items-baseline gap-4 border-b border-white/10 py-6 transition-colors hover:bg-white/[0.03] sm:grid-cols-[4rem_1fr]"
+                  >
                     <span className="font-serif text-lg text-brass-light">{pad(i + 1)}</span>
                     <div>
                       <h3 className="text-2xl transition-colors group-hover:text-brass-light sm:text-3xl">{court.name}</h3>
                       <p className="mt-1 text-sm text-ivory/65">{court.detail}</p>
                     </div>
-                  </div>
+                  </Link>
                 </li>
               ))}
             </ul>

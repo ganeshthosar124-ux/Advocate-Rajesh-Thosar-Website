@@ -55,10 +55,32 @@ export function Effects() {
       if (!frame) frame = requestAnimationFrame(() => ((frame = 0), scan()));
     });
     mo.observe(document.body, { childList: true, subtree: true });
+
+    // Backstop for fast scrolling: if an element crosses the whole viewport
+    // between two rendering frames, the observer never reports it, so on each
+    // scroll frame reveal anything pending that has reached the viewport.
+    let sweepFrame = 0;
+    const sweep = () => {
+      sweepFrame = 0;
+      const vh = window.innerHeight;
+      document.querySelectorAll(".reveal-pending:not(.is-visible)").forEach((el) => {
+        if (el.getBoundingClientRect().top < vh) {
+          reveal(el);
+          io.unobserve(el);
+        }
+      });
+    };
+    const onScroll = () => {
+      if (!sweepFrame) sweepFrame = requestAnimationFrame(sweep);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       mo.disconnect();
       io.disconnect();
+      window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(sweepFrame);
     };
   }, []);
 

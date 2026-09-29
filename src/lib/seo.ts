@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
+import type { PracticeArea } from "./content";
 import { site, siteUrl } from "./site";
 
-const ogImage = { url: "/opengraph-image", width: 1200, height: 630, alt: site.fullName };
+/** Social-sharing image (see scripts/make-og-image.mjs). */
+export const ogImage = { url: "/og/og-image.jpg", width: 1200, height: 630, alt: `${site.name}, Advocate, Ulhasnagar` };
+
+const portraitUrl = `${siteUrl}/images/rajesh-thosar-portrait.jpg`;
+const ids = {
+  website: `${siteUrl}/#website`,
+  practice: `${siteUrl}/#legalservice`,
+  person: `${siteUrl}/about#person`,
+};
 
 /**
  * Complete per-page metadata. Next.js replaces (does not merge) nested objects
  * such as openGraph, so every field is set here rather than inherited.
+ * `title` is the page-specific part; the layout template appends the name.
  */
 export function pageMetadata({
   title,
@@ -22,7 +32,7 @@ export function pageMetadata({
   type?: "website" | "article" | "profile";
   noindex?: boolean;
 }): Metadata {
-  const fullTitle = absoluteTitle ? title : `${title} | ${site.fullName}`;
+  const fullTitle = absoluteTitle ? title : `${title} | ${site.name}`;
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
@@ -41,15 +51,28 @@ export function pageMetadata({
   };
 }
 
-export function legalServiceJsonLd() {
+export function websiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": ids.website,
+    name: site.fullName,
+    alternateName: [site.name, "Rajesh Thosar, Advocate"],
+    url: siteUrl,
+    inLanguage: "en-IN",
+    publisher: { "@id": ids.practice },
+  };
+}
+
+export function legalServiceJsonLd(areas: PracticeArea[]) {
   return {
     "@context": "https://schema.org",
     "@type": "LegalService",
-    "@id": `${siteUrl}/#legalservice`,
+    "@id": ids.practice,
     name: site.fullName,
     description: site.shortDescription,
     url: siteUrl,
-    image: `${siteUrl}/images/rajesh-thosar-portrait.jpg`,
+    image: portraitUrl,
     logo: `${siteUrl}/logo/rt-monogram.png`,
     telephone: site.contact.phone,
     email: site.contact.email,
@@ -61,7 +84,11 @@ export function legalServiceJsonLd() {
       postalCode: site.office.pincode,
       addressCountry: "IN",
     },
-    areaServed: { "@type": "State", name: site.office.state },
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(site.office.mapQuery)}`,
+    areaServed: [
+      { "@type": "City", name: site.office.city },
+      { "@type": "State", name: site.office.state },
+    ],
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -69,25 +96,56 @@ export function legalServiceJsonLd() {
       closes: "18:00",
     },
     knowsLanguage: site.languages,
+    knowsAbout: areas.map((a) => a.title),
     sameAs: [site.contact.linkedin],
-    founder: { "@id": `${siteUrl}/about#person` },
+    founder: { "@id": ids.person },
   };
 }
 
-export function personJsonLd() {
+export function personJsonLd(areas: PracticeArea[]) {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
-    "@id": `${siteUrl}/about#person`,
+    "@id": ids.person,
     name: site.fullName,
     jobTitle: "Advocate",
     url: `${siteUrl}/about`,
-    image: `${siteUrl}/images/rajesh-thosar-portrait.jpg`,
+    image: portraitUrl,
+    telephone: site.contact.phone,
+    email: site.contact.email,
     knowsLanguage: site.languages,
-    sameAs: [site.contact.linkedin],
+    knowsAbout: areas.map((a) => a.title),
+    hasCredential: site.qualifications.map((q) => ({
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "degree",
+      name: q,
+    })),
     memberOf: { "@type": "Organization", name: site.barCouncil },
-    worksFor: { "@id": `${siteUrl}/#legalservice` },
-    workLocation: { "@type": "Place", name: `${site.office.city}, ${site.office.district}, ${site.office.state}` },
+    worksFor: { "@id": ids.practice },
+    workLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: site.office.city,
+        addressRegion: site.office.state,
+        postalCode: site.office.pincode,
+        addressCountry: "IN",
+      },
+    },
+    sameAs: [site.contact.linkedin],
+  };
+}
+
+export function serviceJsonLd(area: PracticeArea) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: area.heading,
+    serviceType: area.title,
+    description: area.description,
+    url: `${siteUrl}/practice-areas/${area.slug}`,
+    provider: { "@type": "LegalService", "@id": ids.practice, name: site.fullName, url: siteUrl },
+    areaServed: { "@type": "State", name: site.office.state },
   };
 }
 

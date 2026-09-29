@@ -4,14 +4,17 @@ import { PracticeGrid } from "@/components/sections/PracticeGrid";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Portrait } from "@/components/sections/Portrait";
 import { JsonLd } from "@/components/ui/JsonLd";
+import { ContactPanel } from "@/components/sections/ContactPanel";
 import { getPracticeAreas } from "@/lib/content";
 import { pageMetadata, personJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "About",
-  description: `Profile of ${site.name}, Advocate enrolled with the ${site.barCouncil}: practice areas, courts and qualifications.`,
+  title: `About ${site.name}, Advocate in ${site.office.city}`,
+  absoluteTitle: true,
+  description: `Profile of ${site.name} (LL.B.), advocate enrolled with the ${site.barCouncil}, with an office on Gandhi Road, ${site.office.city}, ${site.office.district}.`,
   path: "/about",
+  type: "profile",
 });
 
 export default function AboutPage() {
@@ -38,11 +41,11 @@ export default function AboutPage() {
 
   return (
     <>
-      <JsonLd data={personJsonLd()} />
+      <JsonLd data={personJsonLd(areas)} />
       <PageHeader
         title={site.name}
         eyebrow="About"
-        intro={`Advocate enrolled with the ${site.barCouncil}, practising before courts and forums in ${site.office.state}.`}
+        intro={`Advocate in ${site.office.city}, ${site.office.district}, enrolled with the ${site.barCouncil} and practising before courts and forums in ${site.office.state}.`}
         crumbs={[{ name: "About", path: "/about" }]}
       />
 
@@ -50,14 +53,16 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[0.9fr_1.4fr] lg:gap-24">
           <div className="lg:sticky lg:top-32 lg:self-start" data-reveal="left">
             <div className="mx-auto w-full max-w-sm px-4 lg:mx-0">
-              <Portrait />
+              <Portrait preload />
             </div>
           </div>
           <div data-reveal="right">
             <p className="eyebrow mb-5">Profile</p>
             <h2 id="profile-title">
-              {site.name.replace("Adv. ", "")}
-              <span className="mt-2 block text-2xl text-brass-text italic">Advocate · {site.qualifications.join(", ")}</span>
+              Practice &amp; background
+              <span className="mt-2 block text-2xl text-brass-text italic">
+                Advocate · {site.qualifications.join(", ")} · {site.office.city}
+              </span>
             </h2>
             <div className="prose mt-8 text-lg text-muted">
               {site.biography.map((p, i) => (
@@ -95,6 +100,10 @@ export default function AboutPage() {
             Courts & forums
           </ButtonLink>
         </div>
+      </Section>
+
+      <Section tone="white" labelledBy="contact-panel-title" className="!py-16 sm:!py-20">
+        <ContactPanel />
       </Section>
     </>
   );

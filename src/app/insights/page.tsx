@@ -10,7 +10,7 @@ const hasPublished = getArticles().some((a) => !a.draft);
 
 export const metadata = pageMetadata({
   title: "Insights",
-  description: `Articles and legal updates by ${site.fullName}, Advocate, Ulhasnagar. For general information only; not legal advice.`,
+  description: `Articles and legal updates by ${site.name}, advocate in ${site.office.city}, ${site.office.district}. For general information only; not legal advice.`,
   path: "/insights",
   noindex: !hasPublished,
 });

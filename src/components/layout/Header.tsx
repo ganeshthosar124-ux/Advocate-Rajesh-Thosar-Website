@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { navLinks, site, telHref } from "@/lib/site";
+import { site, telHref } from "@/lib/site";
 import { Container } from "@/components/ui/Container";
 import { PhoneIcon } from "@/components/ui/Icons";
 import { Logo } from "./Logo";
@@ -12,7 +12,9 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function Header() {
+type NavLink = { href: string; label: string };
+
+export function Header({ links }: { links: NavLink[] }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -62,7 +64,7 @@ export function Header() {
   }, [open]);
 
   const solid = scrolled || open;
-  const desktopLinks = navLinks.filter((l) => l.href !== "/contact");
+  const desktopLinks = links.filter((l) => l.href !== "/contact");
 
   return (
     <>
@@ -144,7 +146,7 @@ export function Header() {
       >
         <Container className="relative z-10 flex min-h-full flex-col justify-between py-10">
           <ul>
-            {navLinks.map((link, i) => (
+            {links.map((link, i) => (
               <li
                 key={link.href}
                 className="border-b border-white/10 motion-safe:animate-fade-up"

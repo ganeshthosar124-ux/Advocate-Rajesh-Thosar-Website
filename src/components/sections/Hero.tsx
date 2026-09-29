@@ -22,22 +22,31 @@ export function Hero({ facts }: { facts: Fact[] }) {
               <span className="absolute inline-flex size-full rounded-full bg-brass opacity-60 motion-safe:animate-ping" />
               <span className="relative inline-flex size-2 rounded-full bg-brass" />
             </span>
-            Advocate · {site.office.city}, {site.office.district}
+            {site.barCouncil}
           </p>
 
-          <h1 id="hero-title" className="mt-8 text-[clamp(3.4rem,9vw,7.5rem)] leading-[0.92]">
-            <span className="line-mask">
+          {/* The role and place are part of the visible heading. */}
+          <h1 id="hero-title" className="mt-8">
+            <span className="line-mask text-[clamp(3.4rem,9vw,7.5rem)] leading-[0.92]">
               <span style={{ "--d": "120ms" } as React.CSSProperties}>Rajesh A.</span>
             </span>
-            <span className="line-mask">
+            <span className="line-mask text-[clamp(3.4rem,9vw,7.5rem)] leading-[0.92]">
               <span style={{ "--d": "260ms" } as React.CSSProperties} className="text-gold italic">
                 Thosar
               </span>
             </span>
+            <span className="sr-only">, </span>
+            <span
+              className="mt-6 flex items-center gap-4 font-sans text-base font-semibold tracking-[0.16em] text-ivory uppercase motion-safe:animate-fade-up sm:text-lg"
+              style={{ animationDelay: "380ms" }}
+            >
+              <span aria-hidden="true" className="h-px w-10 bg-brass" />
+              Advocate in {site.office.city}, {site.office.district}
+            </span>
           </h1>
 
           <p
-            className="mt-8 max-w-xl text-lg leading-relaxed text-ivory/80 motion-safe:animate-fade-up sm:text-xl"
+            className="mt-6 max-w-xl text-lg leading-relaxed text-ivory/80 motion-safe:animate-fade-up sm:text-xl"
             style={{ animationDelay: "450ms" }}
           >
             Practising before the Bombay High Court, District and Sessions Courts, Magistrate Courts, Consumer
@@ -83,9 +92,10 @@ export function Hero({ facts }: { facts: Fact[] }) {
           >
             <Image
               src={portrait}
-              alt={`Portrait of ${site.name}`}
+              alt={`Portrait of ${site.name}, Advocate`}
               placeholder="blur"
-              priority
+              preload
+              fetchPriority="high"
               sizes="(min-width: 1024px) 416px, (min-width: 640px) 448px, 352px"
               className="size-full object-cover object-top"
             />
@@ -94,12 +104,14 @@ export function Hero({ facts }: { facts: Fact[] }) {
           </div>
 
           <div className="glass-dark absolute top-12 -left-4 hidden rounded-xl px-5 py-4 motion-safe:animate-float sm:-left-20 sm:block">
-            <p className="text-xs font-semibold tracking-[0.18em] text-brass-light uppercase">Enrolled with</p>
-            <p className="mt-1 font-serif text-lg leading-tight text-ivory">{site.barCouncil}</p>
+            <p className="text-xs font-semibold tracking-[0.18em] text-brass-light uppercase">Practising before</p>
+            <p className="mt-1 font-serif text-xl leading-tight text-ivory">Bombay High Court</p>
           </div>
           <div className="glass-dark absolute -right-2 bottom-28 hidden rounded-xl px-5 py-4 motion-safe:animate-float [animation-delay:-3.5s] sm:-right-12 sm:block">
             <p className="text-xs font-semibold tracking-[0.18em] text-brass-light uppercase">Office hours</p>
-            <p className="mt-1 text-sm font-semibold text-ivory">Mon – Sat · 10 am – 6 pm</p>
+            <p className="mt-1 text-sm font-semibold text-ivory">
+              {site.contact.days.replace("Monday to Saturday", "Mon – Sat")} · 10 am – 6 pm
+            </p>
           </div>
         </div>
       </Container>

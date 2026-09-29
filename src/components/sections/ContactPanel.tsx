@@ -19,7 +19,7 @@ export function ContactPanel({ headingId = "contact-panel-title" }: { headingId?
         <div>
           <p className="eyebrow">Contact</p>
           <h2 id={headingId} className="mt-5">
-            Contact the <span className="text-gold italic">office</span>
+            Office in <span className="text-gold italic">{site.office.city}</span>
           </h2>
           <ul className="mt-8 space-y-4 text-ivory/80">
             <li className="flex gap-4">

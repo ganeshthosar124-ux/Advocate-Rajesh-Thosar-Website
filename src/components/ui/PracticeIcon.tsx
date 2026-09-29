@@ -13,14 +13,14 @@ const paths: Record<string, React.ReactNode> = {
       <path d="M12 8v5M12 16h.01" />
     </>
   ),
-  "cheque-dishonour": (
+  "cheque-bounce-section-138": (
     <>
       <rect x="2.5" y="6" width="19" height="12" rx="1" />
       <path d="M6 10h6M6 13.5h9M15.5 10h2.5" />
       <path d="m14 3 6 18" />
     </>
   ),
-  "property-succession": (
+  "property-and-succession": (
     <>
       <path d="M3 11 12 4l9 7" />
       <path d="M5 10v10h14V10" />
@@ -40,7 +40,7 @@ const paths: Record<string, React.ReactNode> = {
       <path d="m9.5 14 2 2 3.5-4" />
     </>
   ),
-  "matrimonial-family": (
+  "matrimonial-and-family-law": (
     <>
       <circle cx="9" cy="14" r="5" />
       <circle cx="15" cy="14" r="5" />

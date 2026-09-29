@@ -5,7 +5,7 @@ const pages = [
   "/",
   "/about",
   "/practice-areas",
-  "/practice-areas/cheque-dishonour",
+  "/practice-areas/cheque-bounce-section-138",
   "/courts",
   "/insights",
   "/contact",
@@ -134,12 +134,24 @@ test("every indexable page has complete social and canonical metadata", async ({
       description: document.querySelector('meta[name="description"]')?.getAttribute("content") ?? "",
     }));
     expect(new URL(meta.canonical!).pathname, path).toBe(path);
-    expect(meta.ogImage, path).toContain("/opengraph-image");
-    expect(meta.twImage, path).toContain("/opengraph-image");
+    expect(meta.ogImage, path).toContain("/og/og-image.jpg");
+    expect(meta.twImage, path).toContain("/og/og-image.jpg");
     expect(meta.ogUrl, path).toBeTruthy();
     expect(meta.ogSite, path).toBe("Advocate Rajesh A. Thosar");
     expect(meta.description.length, path).toBeGreaterThanOrEqual(70);
     expect(meta.description.length, path).toBeLessThanOrEqual(165);
+  }
+});
+
+test("renamed practice-area URLs redirect permanently", async ({ request }) => {
+  for (const [from, to] of [
+    ["cheque-dishonour", "cheque-bounce-section-138"],
+    ["property-succession", "property-and-succession"],
+    ["matrimonial-family", "matrimonial-and-family-law"],
+  ]) {
+    const res = await request.get(`/practice-areas/${from}`, { maxRedirects: 0 });
+    expect(res.status()).toBe(308);
+    expect(res.headers()["location"]).toBe(`/practice-areas/${to}`);
   }
 });
 

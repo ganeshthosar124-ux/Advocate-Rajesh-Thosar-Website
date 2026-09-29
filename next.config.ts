@@ -32,6 +32,14 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: { formats: ["image/avif", "image/webp"] },
+  // Practice-area URLs renamed to match how people search; keep old links working.
+  async redirects() {
+    return [
+      ["cheque-dishonour", "cheque-bounce-section-138"],
+      ["property-succession", "property-and-succession"],
+      ["matrimonial-family", "matrimonial-and-family-law"],
+    ].map(([from, to]) => ({ source: `/practice-areas/${from}`, destination: `/practice-areas/${to}`, permanent: true }));
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

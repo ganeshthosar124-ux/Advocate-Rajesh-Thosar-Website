@@ -1,6 +1,6 @@
-// Regenerates the logo files in public/logo and the site icons.
-// Run from a folder with opentype.js, sharp, @fontsource/cormorant-garamond and
-// @fontsource/inter installed:  node make-logo.mjs <output-dir>
+// Regenerates the logo files in public/logo (outlined SVG + PNG) plus
+// icon-512.png / apple-icon.png (copy those two to src/app/icon.png and
+// src/app/apple-icon.png). Run: npm run brand:logo
 // Generates outlined (font-independent) SVG + PNG logo files.
 import fs from "node:fs";
 import opentype from "opentype.js";
@@ -22,7 +22,9 @@ function text(font, str, size, tracking = 0) {
   const parts = [];
   for (const ch of str) {
     const g = font.charToGlyph(ch);
-    parts.push(g.getPath(x, 0, size).toPathData(2));
+    const d = g.getPath(x, 0, size).toPathData(2);
+    if (d.includes("NaN")) throw new Error(`Invalid outline for "${ch}"; see make-og-image.mjs for the per-glyph workaround`);
+    parts.push(d);
     x += (g.advanceWidth / font.unitsPerEm) * size + tracking;
   }
   return { d: parts.join(" "), width: x - tracking };

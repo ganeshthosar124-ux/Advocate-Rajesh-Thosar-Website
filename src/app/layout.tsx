@@ -5,8 +5,8 @@ import { Footer } from "@/components/layout/Footer";
 import { MobileContactBar } from "@/components/layout/MobileContactBar";
 import { DisclaimerGate } from "@/components/layout/DisclaimerGate";
 import { Effects } from "@/components/layout/Effects";
-import { JsonLd } from "@/components/ui/JsonLd";
-import { legalServiceJsonLd } from "@/lib/seo";
+import { ogImage } from "@/lib/seo";
+import { getNavLinks } from "@/lib/nav";
 import { site, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -27,8 +27,8 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${site.name} | Advocate, ${site.office.city}, ${site.office.district}`,
-    template: `%s | ${site.fullName}`,
+    default: `${site.name} | Advocate in ${site.office.city}, ${site.office.district}`,
+    template: `%s | ${site.name}`,
   },
   description: site.shortDescription,
   applicationName: site.fullName,
@@ -36,9 +36,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     siteName: site.fullName,
+    images: [ogImage],
   },
-  twitter: { card: "summary_large_image", images: ["/opengraph-image"] },
+  twitter: { card: "summary_large_image", images: [ogImage.url] },
   formatDetection: { telephone: false },
+  other: { "geo.region": "IN-MH", "geo.placename": `${site.office.city}, ${site.office.district}` },
 };
 
 export const viewport: Viewport = {
@@ -56,9 +58,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        <JsonLd data={legalServiceJsonLd()} />
         <Effects />
-        <Header />
+        <Header links={getNavLinks()} />
         <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
           {children}
         </main>

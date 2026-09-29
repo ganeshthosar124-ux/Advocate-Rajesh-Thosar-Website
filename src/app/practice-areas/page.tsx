@@ -7,8 +7,8 @@ import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "Practice Areas",
-  description: `Practice areas of ${site.name}: civil, criminal, cheque dishonour, property, banking, consumer, family and writ matters in Maharashtra.`,
+  title: `Practice Areas – Advocate in ${site.office.city}`,
+  description: `Civil, criminal, cheque bounce, property, banking recovery, consumer, matrimonial and writ matters handled by ${site.name}, ${site.office.city}.`,
   path: "/practice-areas",
 });
 
@@ -18,7 +18,7 @@ export default function PracticeAreasPage() {
       <PageHeader
         title="Practice Areas"
         eyebrow="Practice"
-        intro="The practice handles matters in the following areas. Select an area for a description."
+        intro={`Matters handled from the office in ${site.office.city}, ${site.office.district}, before courts and forums in ${site.office.state}. Select an area for details.`}
         crumbs={[{ name: "Practice Areas", path: "/practice-areas" }]}
       />
       <Section tone="ivory">

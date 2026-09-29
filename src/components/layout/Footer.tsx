@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { navLinks, officeAddress, officeHours, site, telHref, whatsappHref } from "@/lib/site";
+import { officeAddress, officeHours, site, telHref, whatsappHref } from "@/lib/site";
+import { getNavLinks } from "@/lib/nav";
+import { getPracticeAreas } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { ArrowIcon } from "@/components/ui/Icons";
 import { Logo } from "./Logo";
@@ -14,6 +16,7 @@ const heading = "font-sans text-xs font-bold uppercase tracking-[0.24em] text-br
 const link = "inline-block py-1.5 transition-colors hover:text-ivory";
 
 export function Footer() {
+  const areas = getPracticeAreas();
   return (
     <footer className="stage grain overflow-hidden pb-24 text-ivory/75 lg:pb-0">
       {/* Oversized name as a closing signature */}
@@ -37,7 +40,7 @@ export function Footer() {
         </div>
       </Container>
 
-      <Container className="relative z-10 grid gap-10 py-14 text-sm sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_0.8fr_0.8fr]">
+      <Container className="relative z-10 grid grid-cols-1 gap-10 py-14 text-sm sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1.15fr_0.7fr_0.7fr] lg:gap-8">
         <div>
           <Logo tone="light" />
           <p className="mt-6 leading-relaxed">
@@ -78,10 +81,23 @@ export function Footer() {
           </ul>
         </div>
 
+        <nav aria-label="Practice areas">
+          <h2 className={heading}>Practice areas</h2>
+          <ul className="mt-4">
+            {areas.map((a) => (
+              <li key={a.slug}>
+                <Link href={`/practice-areas/${a.slug}`} className={link}>
+                  {a.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         <nav aria-label="Footer">
           <h2 className={heading}>Pages</h2>
           <ul className="mt-4">
-            {navLinks.map((l) => (
+            {getNavLinks().map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className={link}>
                   {l.label}

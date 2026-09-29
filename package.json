@@ -13,7 +13,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
-    "check": "npm run typecheck && npm run lint && npm run build"
+    "check": "npm run typecheck && npm run lint && npm run build",
+    "brand:og": "node scripts/make-og-image.mjs",
+    "brand:logo": "node scripts/make-logo.mjs public/logo"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -26,6 +28,9 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/manrope": "^5.3.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22.0.0",
@@ -34,6 +39,8 @@
     "@types/react-dom": "^19.3.0",
     "eslint": "^9.39.0",
     "eslint-config-next": "^16.3.7",
+    "opentype.js": "^2.0.0",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
   }

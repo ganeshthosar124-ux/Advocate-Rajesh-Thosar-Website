@@ -14,7 +14,33 @@ All editable content lives in `content/`. Values in `[square brackets]` are plac
 | Articles / legal updates (`draft: true` hides one on the live site) | `content/insights/*.md` |
 | Disclaimer, Privacy Policy, Terms of Use (**drafts, to be approved**) | `src/app/disclaimer`, `src/app/privacy-policy`, `src/app/terms-of-use` |
 | Portrait photograph | `public/images/rajesh-thosar-portrait.jpg` (replace the file, keep the name) |
-| Logo files (SVG for print, PNG for general use) | `public/logo/` — regenerate with `scripts/make-logo.mjs` |
+| Logo files (SVG for print, PNG for general use) | `public/logo/` — regenerate with `npm run brand:logo` |
+
+## SEO
+
+- Page titles and meta descriptions: practice areas set `seoTitle` and `description` in their Markdown front
+  matter; other pages set them in `pageMetadata(...)` at the top of each page file. Keep titles under ~65
+  characters and descriptions between 70 and 160, and keep every claim factual (no "best", "top", "expert",
+  outcome promises or similar).
+- Structured data (JSON-LD, `src/lib/seo.ts`): `WebSite`, `LegalService` and `Person` on the home page,
+  `Person` on About, `LegalService` on Contact, `Service` on each practice area, `BreadcrumbList` on inner pages.
+- `sitemap.xml` and `robots.txt` are generated. Update `updated` in `content/site.json` when content changes.
+- The Insights page is hidden from navigation, the sitemap and search results until an article is published.
+- Social preview image: `public/og/og-image.jpg` (regenerate with `npm run brand:og`).
+
+After launch (these need your accounts):
+
+1. Set `NEXT_PUBLIC_SITE_URL` to the final domain in the hosting settings, then redeploy.
+2. Add the site to [Google Search Console](https://search.google.com/search-console) and submit
+   `https://<domain>/sitemap.xml`. Optionally also Bing Webmaster Tools.
+3. Create or claim the **Google Business Profile** for the office, using exactly the same name, address and
+   phone number as the website, and link it to the website.
+4. Use the same name, address and phone wherever the practice is listed online.
+
+## Brand assets
+
+- `npm run brand:logo` regenerates the logo files in `public/logo/` (outlined SVG for print, PNG for general use).
+- `npm run brand:og` regenerates the social preview image from the portrait.
 
 ## Running locally
 

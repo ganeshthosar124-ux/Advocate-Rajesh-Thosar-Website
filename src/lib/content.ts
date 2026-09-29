@@ -8,9 +8,20 @@ const showDrafts = process.env.NODE_ENV !== "production";
 
 export type PracticeArea = {
   slug: string;
+  /** Short name used on cards and in navigation. */
   title: string;
+  /** Page H1. */
+  heading: string;
+  /** Page-specific part of the <title> tag. */
+  seoTitle: string;
   summary: string;
+  /** Meta description. */
+  description: string;
   order: number;
+  /** Ids of the courts in content/site.json where these matters are heard. */
+  courts: string[];
+  /** Slugs of related practice areas. */
+  related: string[];
   html: string;
 };
 
@@ -42,8 +53,13 @@ export function getPracticeAreas(): PracticeArea[] {
     .map(({ slug, data, html }) => ({
       slug,
       title: String(data.title),
+      heading: String(data.heading ?? data.title),
+      seoTitle: String(data.seoTitle ?? data.title),
       summary: String(data.summary ?? ""),
+      description: String(data.description ?? data.summary ?? ""),
       order: Number(data.order ?? 99),
+      courts: Array.isArray(data.courts) ? data.courts.map(String) : [],
+      related: Array.isArray(data.related) ? data.related.map(String) : [],
       html,
     }))
     .sort((a, b) => a.order - b.order);
