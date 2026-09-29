@@ -1,5 +1,5 @@
-import { officeAddress, site } from "@/lib/site";
-import { ClockIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
+import { officeAddress, site, telHref, whatsappHref } from "@/lib/site";
+import { ChatIcon, ClockIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
 
 export function ContactDetails() {
   const icon = "size-5 shrink-0 text-brass-text";
@@ -26,7 +26,7 @@ export function ContactDetails() {
       <div className={item}>
         <dt className={label}>
           <ClockIcon className={icon} />
-          Hours
+          Office hours
         </dt>
         <dd className={value}>{site.contact.hours}</dd>
       </div>
@@ -37,10 +37,27 @@ export function ContactDetails() {
         </dt>
         <dd className={value}>
           <a
-            href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
+            href={telHref}
             className="inline-block py-1 underline-offset-4 hover:underline"
           >
             {site.contact.phoneDisplay}
+          </a>
+        </dd>
+      </div>
+      <div className={item}>
+        <dt className={label}>
+          <ChatIcon className={icon} />
+          WhatsApp
+        </dt>
+        <dd className={value}>
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block py-1 underline-offset-4 hover:underline"
+          >
+            {site.contact.phoneDisplay}
+            <span className="sr-only"> on WhatsApp (opens in a new tab)</span>
           </a>
         </dd>
       </div>

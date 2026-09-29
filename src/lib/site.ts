@@ -7,8 +7,12 @@ export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:30
 export const officeAddress = [
   site.office.line1,
   site.office.line2,
-  `${site.office.city}, ${site.office.state} ${site.office.pincode}`,
+  `${site.office.city} – ${site.office.pincode}`,
+  `${site.office.district}, ${site.office.state}`,
 ];
+
+export const telHref = `tel:${site.contact.phone}`;
+export const whatsappHref = `https://wa.me/${site.contact.whatsapp}`;
 
 export const navLinks = [
   { href: "/about", label: "About" },

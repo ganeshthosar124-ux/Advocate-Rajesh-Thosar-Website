@@ -23,7 +23,7 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ fontSize: 28, letterSpacing: 8, color: "#d9bd8c", textTransform: "uppercase" }}>Advocate</div>
-        <div style={{ fontSize: 96, marginTop: 20 }}>Rajesh Thosar</div>
+        <div style={{ fontSize: 96, marginTop: 20 }}>Rajesh A. Thosar</div>
         <div style={{ width: 120, height: 4, background: "#b08d57", marginTop: 32 }} />
         <div style={{ fontSize: 32, marginTop: 32, color: "rgba(250,247,240,0.85)" }}>{site.shortDescription}</div>
       </div>

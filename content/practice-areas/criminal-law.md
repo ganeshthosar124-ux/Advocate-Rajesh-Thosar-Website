@@ -1,9 +1,9 @@
 ---
 title: Criminal Law
-summary: Bail, trial and appellate proceedings, and complaints, including matters under the Negotiable Instruments Act.
+summary: Bail, trials, revisions and appeals before Magistrate and Sessions Courts, and related High Court proceedings.
 order: 2
 ---
 
-The practice appears in criminal matters before magistrates' courts and sessions courts, including bail applications, trials, revisions and appeals. It also handles complaints relating to dishonour of cheques under Section 138 of the Negotiable Instruments Act, 1881.
+The practice appears in criminal matters before Judicial Magistrate First Class (JMFC) and Chief Judicial Magistrate (CJM) courts, Sessions Courts and the Bombay High Court. Work includes bail and anticipatory bail applications, trials, private complaints, revisions, appeals and applications for quashing of proceedings.
 
-<!-- DRAFT: please review and edit this description. -->
+Criminal procedure is now governed by the Bharatiya Nagarik Suraksha Sanhita, 2023, and offences by the Bharatiya Nyaya Sanhita, 2023, while matters arising before 1 July 2024 may continue under the earlier Code of Criminal Procedure and Indian Penal Code.

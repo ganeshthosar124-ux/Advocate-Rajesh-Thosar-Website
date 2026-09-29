@@ -5,7 +5,7 @@ const pages = [
   "/",
   "/about",
   "/practice-areas",
-  "/practice-areas/civil-litigation",
+  "/practice-areas/cheque-dishonour",
   "/courts",
   "/insights",
   "/contact",
@@ -25,7 +25,7 @@ test.describe("every page", () => {
       const response = await page.goto(path);
       expect(response?.status()).toBe(200);
       await expect(page.locator("h1")).toHaveCount(1);
-      await expect(page).toHaveTitle(/Rajesh Thosar/);
+      await expect(page).toHaveTitle(/Rajesh A\. Thosar/);
 
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow).toBeLessThanOrEqual(0);

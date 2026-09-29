@@ -7,7 +7,7 @@ export function PracticeGrid({ areas, headingLevel = "h3" }: { areas: PracticeAr
   return (
     <ul className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
       {areas.map((area, i) => (
-        <li key={area.slug} className="bg-ivory">
+        <li key={area.slug} className="bg-ivory sm:max-lg:last:odd:col-span-2">
           <Link
             href={`/practice-areas/${area.slug}`}
             className="group flex h-full flex-col p-7 transition-colors hover:bg-parchment sm:p-8"

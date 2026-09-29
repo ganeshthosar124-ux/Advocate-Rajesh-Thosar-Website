@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { navLinks, officeAddress, site } from "@/lib/site";
+import { navLinks, officeAddress, site, telHref } from "@/lib/site";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "./Logo";
 
@@ -16,10 +16,18 @@ export function Footer() {
         <div className="sm:col-span-2 lg:col-span-1">
           <Logo tone="light" />
           <p className="mt-5 text-sm leading-relaxed">
-            Enrolled with the {site.enrolment.barCouncil}
+            {site.qualifications.join(", ")}
             <br />
-            Enrolment No. {site.enrolment.number}
+            Enrolled with the {site.barCouncil}
           </p>
+          <a
+            href={site.contact.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-block py-1.5 text-sm hover:text-ivory hover:underline"
+          >
+            LinkedIn<span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </div>
 
         <div>
@@ -34,7 +42,7 @@ export function Footer() {
           <ul className="mt-3 text-sm">
             <li>
               <a
-                href={`tel:${site.contact.phone.replace(/\s/g, "")}`}
+                href={telHref}
                 className="inline-block py-1.5 hover:text-ivory hover:underline"
               >
                 {site.contact.phoneDisplay}

@@ -1,6 +1,6 @@
-# Advocate Rajesh Thosar — Website
+# Advocate Rajesh A. Thosar — Website
 
-Website of Advocate Rajesh Thosar, built with Next.js (App Router), TypeScript and Tailwind CSS. Every page is
+Website of Advocate Rajesh A. Thosar, built with Next.js (App Router), TypeScript and Tailwind CSS. Every page is
 pre-rendered as static HTML; the only server code is the contact form.
 
 ## Editing content
@@ -9,12 +9,12 @@ All editable content lives in `content/`. Values in `[square brackets]` are plac
 
 | What | Where |
 |---|---|
-| Name, enrolment details, qualifications, courts, phone, email, address, hours | `content/site.json` |
+| Name, Bar Council, qualification, biography, courts, phone, WhatsApp, email, LinkedIn, address, hours | `content/site.json` |
 | Practice areas (one Markdown file each; `order` sets position) | `content/practice-areas/*.md` |
 | Articles / legal updates (`draft: true` hides one on the live site) | `content/insights/*.md` |
-| Biography and introduction text | `src/app/about/page.tsx`, `src/app/page.tsx` |
 | Disclaimer, Privacy Policy, Terms of Use (**drafts, to be approved**) | `src/app/disclaimer`, `src/app/privacy-policy`, `src/app/terms-of-use` |
-| Portrait photograph | add to `public/images/`, then replace `PortraitPlaceholder` |
+| Portrait photograph | `public/images/rajesh-thosar-portrait.jpg` (replace the file, keep the name) |
+| Logo files (SVG for print, PNG for general use) | `public/logo/` — regenerate with `scripts/make-logo.mjs` |
 
 ## Running locally
 

@@ -34,6 +34,9 @@ export function legalServiceJsonLd() {
       postalCode: site.office.pincode,
       addressCountry: "IN",
     },
+    areaServed: site.office.state,
+    openingHours: "10:00-18:00",
+    sameAs: [site.contact.linkedin],
     founder: { "@id": `${siteUrl}/about#person` },
   };
 }
@@ -46,7 +49,9 @@ export function personJsonLd() {
     name: site.fullName,
     jobTitle: "Advocate",
     url: `${siteUrl}/about`,
-    knowsLanguage: site.languages,
+    sameAs: [site.contact.linkedin],
+    memberOf: { "@type": "Organization", name: site.barCouncil },
+    workLocation: { "@type": "Place", name: `${site.office.city}, ${site.office.district}, ${site.office.state}` },
   };
 }
 

@@ -1,11 +1,11 @@
-import { site } from "@/lib/site";
+import { site, telHref, whatsappHref } from "@/lib/site";
 import { ChatIcon, MailIcon, PhoneIcon } from "@/components/ui/Icons";
 
 // Quick contact actions pinned to the bottom of small screens.
 export function MobileContactBar() {
   const items = [
-    { href: `tel:${site.contact.phone.replace(/\s/g, "")}`, label: "Call", Icon: PhoneIcon },
-    { href: `https://wa.me/${site.contact.whatsapp}`, label: "WhatsApp", Icon: ChatIcon, external: true },
+    { href: telHref, label: "Call", Icon: PhoneIcon },
+    { href: whatsappHref, label: "WhatsApp", Icon: ChatIcon, external: true },
     { href: `mailto:${site.contact.email}`, label: "Email", Icon: MailIcon },
   ];
   return (

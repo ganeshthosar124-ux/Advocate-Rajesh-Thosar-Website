@@ -18,7 +18,7 @@ export default function ContactPage() {
       <PageHeader
         title="Contact"
         eyebrow="Office"
-        intro="Meetings are by prior appointment. You may telephone, email, or send an enquiry using the form below."
+        intro="You may telephone, send a WhatsApp message or email the office, or send an enquiry using the form below."
         crumbs={[{ name: "Contact", path: "/contact" }]}
       />
       <Section labelledBy="details-title">
