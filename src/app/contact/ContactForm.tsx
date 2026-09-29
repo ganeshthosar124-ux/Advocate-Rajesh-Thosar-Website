@@ -9,7 +9,7 @@ import type { ContactFieldErrors, ContactState } from "@/lib/contact-schema";
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 const inputClass =
-  "mt-2 block w-full border border-line bg-white px-4 py-3 text-base text-charcoal outline-none transition-colors focus:border-ink focus-visible:outline-2 focus-visible:outline-brass aria-[invalid=true]:border-maroon";
+  "mt-2 block w-full rounded-xl border border-line bg-white px-4 py-3.5 text-base text-charcoal outline-none transition-[border-color,box-shadow] duration-300 placeholder:text-muted/60 focus:border-brass focus:shadow-[0_0_0_4px_rgba(197,160,89,0.18)] aria-[invalid=true]:border-maroon";
 
 function Field({
   name,
@@ -64,13 +64,13 @@ export function ContactForm() {
         className={
           state.status === "idle"
             ? "sr-only"
-            : `border-l-4 p-4 text-sm outline-none ${state.status === "success" ? "border-ink bg-parchment text-ink" : "border-maroon bg-maroon/5 text-maroon"}`
+            : `rounded-xl border-l-4 p-4 text-sm outline-none ${state.status === "success" ? "border-ink bg-parchment text-ink" : "border-maroon bg-maroon/5 text-maroon"}`
         }
       >
         {state.message}
       </div>
 
-      <p className="border border-line bg-parchment p-4 text-sm text-muted">
+      <p className="rounded-xl border border-line bg-parchment p-4 text-sm text-muted">
         Please do not include confidential details of your matter in this form. Submitting an enquiry does not
         create an advocate–client relationship.
       </p>
@@ -137,7 +137,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-12 items-center justify-center bg-ink px-8 py-3 text-sm font-semibold tracking-wide text-ivory transition-colors hover:bg-ink-700 disabled:opacity-60"
+        className="inline-flex min-h-13 w-full items-center justify-center gap-3 rounded-full bg-ink px-8 py-3.5 text-sm font-semibold tracking-wide text-ivory transition-colors hover:bg-ink-700 disabled:opacity-60 sm:w-auto"
       >
         {pending ? "Sending…" : "Send enquiry"}
       </button>

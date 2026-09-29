@@ -15,9 +15,9 @@ export function LegalPage({
   return (
     <>
       <PageHeader title={title} eyebrow="Legal" crumbs={[{ name: title, path }]} />
-      <Section>
+      <Section tone="white">
         <p className="mb-8 text-sm text-muted">Last updated: {updated}</p>
-        <div className="prose text-[1.02rem]">{children}</div>
+        <div className="prose text-[1.02rem] text-muted" data-reveal>{children}</div>
       </Section>
     </>
   );

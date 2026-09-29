@@ -1,81 +1,57 @@
 import { officeAddress, site, telHref, whatsappHref } from "@/lib/site";
 import { ChatIcon, ClockIcon, MailIcon, PhoneIcon, PinIcon } from "@/components/ui/Icons";
 
-export function ContactDetails() {
-  const icon = "size-5 shrink-0 text-brass-text";
-  const item = "grid grid-cols-[1.25rem_1fr] gap-x-4 gap-y-2";
-  const label = "col-span-2 flex items-center gap-4 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-brass-text";
-  const value = "col-start-2";
+function Item({
+  label,
+  Icon,
+  wide = false,
+  children,
+}: {
+  label: string;
+  Icon: (p: { className?: string }) => React.ReactNode;
+  wide?: boolean;
+  children: React.ReactNode;
+}) {
   return (
-    <dl className="grid content-start gap-8 sm:grid-cols-2">
-      <div className={item}>
-        <dt className={label}>
-          <PinIcon className={icon} />
-          Office
-        </dt>
-        <dd className={value}>
-          <address className="not-italic">
-            {officeAddress.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </address>
-        </dd>
+    <li className={`flex gap-4 rounded-2xl border border-line bg-ivory p-5 ${wide ? "sm:col-span-2" : ""}`}>
+      <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-brass-light">
+        <Icon />
+      </span>
+      <div className="min-w-0">
+        <p className="text-[0.7rem] font-bold tracking-[0.2em] text-brass-text uppercase">{label}</p>
+        <div className="mt-1 text-ink">{children}</div>
       </div>
-      <div className={item}>
-        <dt className={label}>
-          <ClockIcon className={icon} />
-          Office hours
-        </dt>
-        <dd className={value}>
-          {site.contact.days}
-          <br />
-          {site.contact.hours}
-        </dd>
-      </div>
-      <div className={item}>
-        <dt className={label}>
-          <PhoneIcon className={icon} />
-          Telephone
-        </dt>
-        <dd className={value}>
-          <a
-            href={telHref}
-            className="inline-block py-1 underline-offset-4 hover:underline"
-          >
+    </li>
+  );
+}
+
+const link = "block py-0.5 font-semibold whitespace-nowrap hover:text-brass-text";
+
+export function ContactDetails() {
+  return (
+    <ul className="grid gap-3 sm:grid-cols-2">
+        <Item label="Office" Icon={PinIcon} wide>
+          <address className="not-italic">{officeAddress.join(", ")}</address>
+        </Item>
+        <Item label="Office hours" Icon={ClockIcon} wide>
+          {site.contact.days}, {site.contact.hours}
+        </Item>
+        <Item label="Telephone" Icon={PhoneIcon}>
+          <a href={telHref} className={link}>
             {site.contact.phoneDisplay}
           </a>
-        </dd>
-      </div>
-      <div className={item}>
-        <dt className={label}>
-          <ChatIcon className={icon} />
-          WhatsApp
-        </dt>
-        <dd className={value}>
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block py-1 underline-offset-4 hover:underline"
-          >
+        </Item>
+        <Item label="WhatsApp" Icon={ChatIcon}>
+          <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={link}>
             {site.contact.phoneDisplay}
             <span className="sr-only"> on WhatsApp (opens in a new tab)</span>
           </a>
-        </dd>
-      </div>
-      <div className={item}>
-        <dt className={label}>
-          <MailIcon className={icon} />
-          Email
-        </dt>
-        <dd className={value}>
-          <a href={`mailto:${site.contact.email}`} className="inline-block break-all py-1 underline-offset-4 hover:underline">
+        </Item>
+        <Item label="Email" Icon={MailIcon} wide>
+          <a href={`mailto:${site.contact.email}`} className={`${link} !whitespace-normal break-all`}>
             {site.contact.email}
           </a>
-        </dd>
-      </div>
-    </dl>
+        </Item>
+    </ul>
   );
 }

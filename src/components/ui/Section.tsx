@@ -1,11 +1,12 @@
 import { Container } from "./Container";
 
-type Tone = "ivory" | "parchment" | "ink";
+type Tone = "ivory" | "white" | "parchment" | "ink";
 
 const tones: Record<Tone, string> = {
   ivory: "bg-ivory",
+  white: "bg-white",
   parchment: "bg-parchment",
-  ink: "bg-ink text-ivory [&_h2]:text-ivory [&_h3]:text-ivory [&_.eyebrow]:text-brass-light",
+  ink: "stage grain overflow-hidden",
 };
 
 export function Section({
@@ -13,15 +14,17 @@ export function Section({
   tone = "ivory",
   className = "",
   labelledBy,
+  id,
 }: {
   children: React.ReactNode;
   tone?: Tone;
   className?: string;
   labelledBy?: string;
+  id?: string;
 }) {
   return (
-    <section aria-labelledby={labelledBy} className={`py-16 sm:py-20 lg:py-24 ${tones[tone]} ${className}`}>
-      <Container>{children}</Container>
+    <section id={id} aria-labelledby={labelledBy} className={`relative py-20 sm:py-24 lg:py-32 ${tones[tone]} ${className}`}>
+      <Container className="relative z-10">{children}</Container>
     </section>
   );
 }
@@ -31,18 +34,20 @@ export function SectionHeading({
   eyebrow,
   title,
   intro,
+  align = "left",
 }: {
   id: string;
   eyebrow?: string;
-  title: string;
+  title: React.ReactNode;
   intro?: string;
+  align?: "left" | "center";
 }) {
+  const center = align === "center";
   return (
-    <div className="mb-10 max-w-2xl sm:mb-12">
-      {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
+    <div className={`mb-12 max-w-3xl sm:mb-16 ${center ? "mx-auto text-center" : ""}`} data-reveal>
+      {eyebrow && <p className="eyebrow mb-5">{eyebrow}</p>}
       <h2 id={id}>{title}</h2>
-      <span className="rule mt-5" aria-hidden="true" />
-      {intro && <p className="mt-5 text-lg opacity-90">{intro}</p>}
+      {intro && <p className={`mt-6 text-lg leading-relaxed opacity-80 ${center ? "mx-auto" : ""} max-w-2xl`}>{intro}</p>}
     </div>
   );
 }

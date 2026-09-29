@@ -21,7 +21,7 @@ export default function InsightsPage() {
         intro="Articles on developments in the law, for general information only. They are not legal advice."
         crumbs={[{ name: "Insights", path: "/insights" }]}
       />
-      <Section>
+      <Section tone="white">
         {articles.length === 0 ? (
           <p className="text-lg text-muted">Articles will be published here soon.</p>
         ) : (

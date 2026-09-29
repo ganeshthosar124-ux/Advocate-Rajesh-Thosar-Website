@@ -45,7 +45,7 @@ export default async function ArticlePage({ params }: Props) {
           { name: article.title, path: `/insights/${article.slug}` },
         ]}
       />
-      <Section>
+      <Section tone="white">
         <article>
           <p className="mb-8 text-sm text-muted">
             By {site.fullName} · <time dateTime={article.date}>{formatDate(article.date)}</time>

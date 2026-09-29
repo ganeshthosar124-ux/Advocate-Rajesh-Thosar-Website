@@ -11,7 +11,7 @@ export function MapEmbed({ query }: { query: string }) {
   const link = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden border border-line bg-parchment sm:aspect-[16/10]">
+    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line bg-[radial-gradient(circle_at_30%_30%,#fff,var(--color-parchment))] sm:aspect-[16/10]">
       {show ? (
         <iframe
           src={src}
@@ -28,7 +28,7 @@ export function MapEmbed({ query }: { query: string }) {
             <button
               type="button"
               onClick={() => setShow(true)}
-              className="min-h-11 bg-ink px-5 py-2 text-sm font-semibold text-ivory hover:bg-ink-700"
+              className="min-h-11 rounded-full bg-ink px-6 py-2 text-sm font-semibold text-ivory hover:bg-ink-700"
             >
               Show map
             </button>
@@ -36,7 +36,7 @@ export function MapEmbed({ query }: { query: string }) {
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center border border-ink px-5 py-2 text-sm font-semibold text-ink hover:bg-ivory"
+              className="inline-flex min-h-11 items-center rounded-full border border-ink/30 px-6 py-2 text-sm font-semibold text-ink hover:border-ink"
             >
               Open in Google Maps<span className="sr-only"> (opens in a new tab)</span>
             </a>

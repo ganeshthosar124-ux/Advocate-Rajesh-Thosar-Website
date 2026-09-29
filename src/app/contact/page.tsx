@@ -8,7 +8,7 @@ import { MapEmbed } from "./MapEmbed";
 
 export const metadata = pageMetadata({
   title: "Contact",
-  description: `Office address, telephone, email and enquiry form for ${site.fullName}.`,
+  description: `Office address, telephone, WhatsApp, email and enquiry form for ${site.name}, ${site.office.city}.`,
   path: "/contact",
 });
 
@@ -21,21 +21,25 @@ export default function ContactPage() {
         intro="You may telephone, send a WhatsApp message or email the office, or send an enquiry using the form below."
         crumbs={[{ name: "Contact", path: "/contact" }]}
       />
-      <Section labelledBy="details-title">
-        <h2 id="details-title" className="sr-only">
-          Contact details
-        </h2>
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <ContactDetails />
-          <MapEmbed query={site.office.mapQuery} />
-        </div>
-      </Section>
-      <Section tone="parchment" labelledBy="form-title">
-        <div className="mx-auto max-w-3xl">
-          <h2 id="form-title">Send an enquiry</h2>
-          <span className="rule mt-5 mb-8" aria-hidden="true" />
-          <div className="border border-line bg-ivory p-6 sm:p-10">
-            <ContactForm />
+      <Section tone="white" labelledBy="details-title">
+        <div className="grid gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+          <div className="space-y-6" data-reveal="left">
+            <h2 id="details-title" className="text-4xl">
+              Office details
+            </h2>
+            <ContactDetails />
+            <MapEmbed query={site.office.mapQuery} />
+          </div>
+          <div data-reveal="right">
+            <div className="rounded-[1.75rem] border border-line bg-ivory p-6 shadow-[0_40px_80px_-50px_rgba(11,26,48,0.5)] sm:p-10">
+              <p className="eyebrow mb-4">Enquiry</p>
+              <h2 id="form-title" className="text-4xl">
+                Send an enquiry
+              </h2>
+              <div className="mt-8">
+                <ContactForm />
+              </div>
+            </div>
           </div>
         </div>
       </Section>

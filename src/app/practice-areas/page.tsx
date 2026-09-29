@@ -1,13 +1,14 @@
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { PracticeGrid } from "@/components/sections/PracticeGrid";
+import { ContactPanel } from "@/components/sections/ContactPanel";
 import { getPracticeAreas } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Practice Areas",
-  description: `Areas of practice of ${site.fullName}, including civil, criminal, family, property, banking and consumer matters.`,
+  description: `Areas of practice of ${site.name}: civil, criminal, cheque dishonour, property and succession, banking and recovery, consumer, matrimonial, writ and regulatory matters.`,
   path: "/practice-areas",
 });
 
@@ -20,8 +21,11 @@ export default function PracticeAreasPage() {
         intro="The practice handles matters in the following areas. Select an area for a description."
         crumbs={[{ name: "Practice Areas", path: "/practice-areas" }]}
       />
-      <Section>
-        <PracticeGrid areas={getPracticeAreas()} headingLevel="h2" />
+      <Section tone="ivory">
+        <PracticeGrid areas={getPracticeAreas()} headingLevel="h2" tone="light" />
+      </Section>
+      <Section tone="ivory" labelledBy="contact-panel-title" className="!pt-0">
+        <ContactPanel />
       </Section>
     </>
   );

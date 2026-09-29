@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { Section } from "@/components/ui/Section";
+import { Section, SectionHeading } from "@/components/ui/Section";
+import { PracticeGrid } from "@/components/sections/PracticeGrid";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Portrait } from "@/components/sections/Portrait";
 import { JsonLd } from "@/components/ui/JsonLd";
@@ -39,61 +39,61 @@ export default function AboutPage() {
   return (
     <>
       <JsonLd data={personJsonLd()} />
-      <PageHeader title={site.name} eyebrow="About" crumbs={[{ name: "About", path: "/about" }]} />
+      <PageHeader
+        title={site.name}
+        eyebrow="About"
+        intro={`Advocate enrolled with the ${site.barCouncil}, practising before courts and forums in ${site.office.state}.`}
+        crumbs={[{ name: "About", path: "/about" }]}
+      />
 
-      <Section labelledBy="profile-title">
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
-          <div className="mx-auto w-full max-w-xs pr-4 pb-4 sm:max-w-sm lg:mx-0">
-            <Portrait />
-          </div>
-          <div>
-            <h2 id="profile-title">Profile</h2>
-            <span className="rule mt-5" aria-hidden="true" />
-            <div className="prose mt-6 text-lg text-muted">
-              {site.biography.map((p) => (
-                <p key={p.slice(0, 24)}>{p}</p>
-              ))}
+      <Section tone="white" labelledBy="profile-title">
+        <div className="grid gap-16 lg:grid-cols-[0.9fr_1.4fr] lg:gap-24">
+          <div className="lg:sticky lg:top-32 lg:self-start" data-reveal="left">
+            <div className="mx-auto w-full max-w-sm px-4 lg:mx-0">
+              <Portrait />
             </div>
           </div>
-        </div>
-      </Section>
+          <div data-reveal="right">
+            <p className="eyebrow mb-5">Profile</p>
+            <h2 id="profile-title">
+              {site.name.replace("Adv. ", "")}
+              <span className="mt-2 block text-2xl text-brass-text italic">Advocate · {site.qualifications.join(", ")}</span>
+            </h2>
+            <div className="prose mt-8 text-lg text-muted">
+              {site.biography.map((p, i) => (
+                <p key={p.slice(0, 24)} className={i === 0 ? "text-xl text-ink" : undefined}>
+                  {p}
+                </p>
+              ))}
+            </div>
 
-      <Section tone="parchment" labelledBy="credentials-title">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <h2 id="credentials-title">Details</h2>
-            <span className="rule mt-5" aria-hidden="true" />
-            <dl className="mt-8 divide-y divide-line border-y border-line">
+            <dl className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
               {details.map(([k, v]) => (
-                <div key={k} className="grid gap-1 py-4 sm:grid-cols-[9rem_1fr] sm:gap-6">
-                  <dt className="text-muted">{k}</dt>
-                  <dd className="font-medium text-ink">{v}</dd>
+                <div key={k} className="bg-ivory p-6 sm:last:odd:col-span-2">
+                  <dt className="text-[0.7rem] font-bold tracking-[0.2em] text-brass-text uppercase">{k}</dt>
+                  <dd className="mt-2 font-medium text-ink">{v}</dd>
                 </div>
               ))}
             </dl>
           </div>
-          <div>
-            <h2>Areas of practice</h2>
-            <span className="rule mt-5" aria-hidden="true" />
-            <ul className="mt-8 divide-y divide-line border-y border-line">
-              {areas.map((a) => (
-                <li key={a.slug}>
-                  <Link
-                    href={`/practice-areas/${a.slug}`}
-                    className="flex min-h-12 items-center justify-between py-3 font-serif text-xl text-ink hover:text-brass-text"
-                  >
-                    {a.title}
-                    <span aria-hidden="true">→</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8">
-              <ButtonLink href="/courts" variant="secondary">
-                Courts & forums
-              </ButtonLink>
-            </div>
-          </div>
+        </div>
+      </Section>
+
+      <Section tone="ink" labelledBy="areas-title">
+        <SectionHeading
+          id="areas-title"
+          eyebrow="Practice"
+          title={
+            <>
+              Areas of <span className="text-gold italic">practice</span>
+            </>
+          }
+        />
+        <PracticeGrid areas={areas} />
+        <div className="mt-12" data-reveal>
+          <ButtonLink href="/courts" variant="outline-light">
+            Courts & forums
+          </ButtonLink>
         </div>
       </Section>
     </>

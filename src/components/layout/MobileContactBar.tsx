@@ -11,17 +11,17 @@ export function MobileContactBar() {
   return (
     <nav
       aria-label="Quick contact"
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-ink-700 bg-ink pb-[env(safe-area-inset-bottom)] lg:hidden"
+      className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 overflow-hidden rounded-full border border-brass/30 bg-ink-900/90 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl lg:hidden"
     >
-      <ul className="grid grid-cols-3">
+      <ul className="grid grid-cols-3 divide-x divide-white/10">
         {items.map(({ href, label, Icon, external }) => (
           <li key={label}>
             <a
               href={href}
               {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="flex min-h-14 flex-col items-center justify-center gap-1 text-xs font-medium tracking-wide text-ivory"
+              className="flex min-h-14 items-center justify-center gap-2 text-[0.8rem] font-semibold tracking-wide text-ivory active:bg-white/5"
             >
-              <Icon className="size-5 text-brass-light" />
+              <Icon className="size-[1.1rem] text-brass-light" />
               {label}
             </a>
           </li>

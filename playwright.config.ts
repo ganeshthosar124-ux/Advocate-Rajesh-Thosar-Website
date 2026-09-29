@@ -10,6 +10,8 @@ export default defineConfig({
   reporter: "list",
   use: {
     baseURL: `http://localhost:${port}`,
+    // Accessibility checks run against the settled page, not mid-animation.
+    contextOptions: { reducedMotion: "reduce" },
     launchOptions: { executablePath },
   },
   projects: [
