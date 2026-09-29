@@ -53,8 +53,8 @@ export default function PrivacyPolicyPage() {
 
       <h2>Third-party services</h2>
       <ul>
-        <li>[Hosting provider, e.g. Vercel / Cloudflare]</li>
-        <li>[Email provider used to deliver enquiries]</li>
+        <li>Vercel, which hosts this website</li>
+        <li>Google (Gmail), which delivers enquiry emails to the office</li>
         <li>Cloudflare Turnstile, if enabled, to protect the form from spam</li>
         <li>Google Maps, only if you choose to load the map on the Contact page</li>
       </ul>

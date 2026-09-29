@@ -47,10 +47,21 @@ environment (see `.env.example`):
 Without SMTP settings the form shows a message asking visitors to telephone or email instead.
 Protections: server-side validation, honeypot field, per-IP rate limit, optional Turnstile.
 
-## Deployment
+## Deployment (Vercel, free Hobby plan)
 
-Designed for Vercel or any Node host (`npm run build && npm start`). Set `NEXT_PUBLIC_SITE_URL` to the final
-domain so canonical URLs, the sitemap and social previews are correct.
+1. Sign in at <https://vercel.com> with the GitHub account that owns this repository.
+2. **Add New → Project**, pick `Advocate-Rajesh-Thosar-Website`, keep the detected Next.js settings, and in
+   **Settings → Git** set the production branch to the branch holding this code.
+3. Under **Settings → Environment Variables** add the contact-form settings, then redeploy.
+   With Gmail: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER=<gmail address>`,
+   `SMTP_PASS=<a Google "App password", not the normal password>`, `CONTACT_TO=<address that receives enquiries>`.
+   (App passwords require 2-Step Verification on the Google account.)
+4. The site is then live at `https://<project>.vercel.app`; until a domain is set, canonical URLs and the
+   sitemap use that address automatically.
+5. After buying a `.com`/`.in` domain: **Settings → Domains → Add**, create the DNS records Vercel shows at the
+   registrar, and set `NEXT_PUBLIC_SITE_URL=https://<domain>`.
+
+Any Node host also works (`npm run build && npm start`).
 
 Security headers (CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy) are set in `next.config.ts`.
 

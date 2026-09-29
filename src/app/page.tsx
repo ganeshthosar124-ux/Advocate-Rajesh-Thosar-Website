@@ -9,7 +9,7 @@ import { Portrait } from "@/components/sections/Portrait";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { formatDate, getArticles, getPracticeAreas } from "@/lib/content";
 import { personJsonLd } from "@/lib/seo";
-import { site } from "@/lib/site";
+import { officeHours, site } from "@/lib/site";
 
 export default function HomePage() {
   const areas = getPracticeAreas();
@@ -84,7 +84,8 @@ export default function HomePage() {
                 ["Bar Council", site.barCouncil],
                 ["Qualification", site.qualifications.join(", ")],
                 ["Office", `${site.office.city}, ${site.office.district}`],
-                ["Office hours", site.contact.hours],
+                ["Languages", site.languages.join(", ")],
+                ["Office hours", officeHours],
               ].map(([k, v]) => (
                 <div key={k} className="flex flex-col gap-1 py-3 sm:flex-row sm:justify-between sm:gap-4">
                   <dt className="text-muted">{k}</dt>

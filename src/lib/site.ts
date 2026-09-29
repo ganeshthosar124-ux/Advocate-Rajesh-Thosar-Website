@@ -2,7 +2,15 @@ import siteData from "@content/site.json";
 
 export const site = siteData;
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+// NEXT_PUBLIC_SITE_URL is the final domain. Until one is set, fall back to the
+// Vercel production URL (set automatically by Vercel), then localhost.
+export const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "") ||
+  "http://localhost:3000"
+).replace(/\/$/, "");
+
+export const officeHours = `${site.contact.days}, ${site.contact.hours}`;
 
 export const officeAddress = [
   site.office.line1,

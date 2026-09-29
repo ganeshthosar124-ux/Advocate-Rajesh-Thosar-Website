@@ -19,6 +19,7 @@ export default function AboutPage() {
   const details: [string, React.ReactNode][] = [
     ["Bar Council", site.barCouncil],
     ["Qualification", site.qualifications.join(", ")],
+    ["Languages", site.languages.join(", ")],
     ["Courts", site.courts.map((c) => c.name).join(", ")],
     ["Office", `${site.office.city}, ${site.office.district}, ${site.office.state}`],
     [

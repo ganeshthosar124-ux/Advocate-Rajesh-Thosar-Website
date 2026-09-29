@@ -28,7 +28,11 @@ export function ContactDetails() {
           <ClockIcon className={icon} />
           Office hours
         </dt>
-        <dd className={value}>{site.contact.hours}</dd>
+        <dd className={value}>
+          {site.contact.days}
+          <br />
+          {site.contact.hours}
+        </dd>
       </div>
       <div className={item}>
         <dt className={label}>
