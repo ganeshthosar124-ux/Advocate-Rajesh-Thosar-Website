@@ -1,0 +1,36 @@
+{
+  "_note": "Edit this file to update contact and registration details across the whole site. Values in [square brackets] are placeholders awaiting confirmation.",
+  "name": "Adv. Rajesh Thosar",
+  "fullName": "Advocate Rajesh Thosar",
+  "shortDescription": "Advocate practising in civil, criminal, family and property matters.",
+  "enrolment": {
+    "number": "[Enrolment No. to be provided]",
+    "date": "[Date of enrolment to be provided]",
+    "barCouncil": "[State Bar Council to be provided]"
+  },
+  "qualifications": ["[Degree, University, Year]", "[Degree, University, Year]"],
+  "languages": ["English", "Hindi", "Marathi"],
+  "courts": [
+    "[High Court / Bench]",
+    "[District & Sessions Court]",
+    "[Civil Courts]",
+    "[Family Court]",
+    "[Consumer Disputes Redressal Commission]",
+    "[Debts Recovery Tribunal]"
+  ],
+  "contact": {
+    "phone": "+91 00000 00000",
+    "phoneDisplay": "+91 00000 00000",
+    "whatsapp": "910000000000",
+    "email": "contact@example.in",
+    "hours": "Monday to Saturday, 10:30 am – 7:00 pm (by prior appointment)"
+  },
+  "office": {
+    "line1": "[Office / Chamber No., Building]",
+    "line2": "[Street, Area]",
+    "city": "[City]",
+    "state": "[State]",
+    "pincode": "[PIN]",
+    "mapQuery": "[City] India"
+  }
+}
