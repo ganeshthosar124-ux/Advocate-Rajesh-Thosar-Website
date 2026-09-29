@@ -54,6 +54,8 @@ export function ContactForm() {
   }, [state]);
 
   const errors = state.errors;
+  // Re-applied after React resets the form, so a failed submission keeps its input.
+  const v = state.status === "error" ? (state.values ?? {}) : {};
 
   return (
     <form ref={formRef} action={formAction} noValidate className="space-y-6">
@@ -77,21 +79,21 @@ export function ContactForm() {
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field name="name" label="Name" errors={errors}>
-          {(p) => <input {...p} name="name" type="text" autoComplete="name" required maxLength={100} className={inputClass} />}
+          {(p) => <input {...p} defaultValue={v.name} name="name" type="text" autoComplete="name" required maxLength={100} className={inputClass} />}
         </Field>
         <Field name="email" label="Email" errors={errors}>
-          {(p) => <input {...p} name="email" type="email" autoComplete="email" required maxLength={200} className={inputClass} />}
+          {(p) => <input {...p} defaultValue={v.email} name="email" type="email" autoComplete="email" required maxLength={200} className={inputClass} />}
         </Field>
         <Field name="phone" label="Phone" errors={errors} required={false}>
-          {(p) => <input {...p} name="phone" type="tel" autoComplete="tel" maxLength={20} className={inputClass} />}
+          {(p) => <input {...p} defaultValue={v.phone} name="phone" type="tel" autoComplete="tel" maxLength={20} className={inputClass} />}
         </Field>
         <Field name="subject" label="Subject" errors={errors}>
-          {(p) => <input {...p} name="subject" type="text" required maxLength={150} className={inputClass} />}
+          {(p) => <input {...p} defaultValue={v.subject} name="subject" type="text" required maxLength={150} className={inputClass} />}
         </Field>
       </div>
 
       <Field name="message" label="Message" errors={errors}>
-        {(p) => <textarea {...p} name="message" rows={6} required maxLength={2000} className={inputClass} />}
+        {(p) => <textarea {...p} defaultValue={v.message} name="message" rows={6} required maxLength={2000} className={inputClass} />}
       </Field>
 
       {/* Honeypot field, hidden from people and assistive technology */}
@@ -106,11 +108,12 @@ export function ContactForm() {
         <label className="flex items-start gap-3 text-sm">
           <input
             name="consent"
+            defaultChecked={v.consent}
             type="checkbox"
             required
             aria-invalid={errors?.consent ? true : undefined}
             aria-describedby={errors?.consent ? "consent-error" : undefined}
-            className="mt-1 size-5 shrink-0 accent-ink"
+            className="mt-0.5 size-6 shrink-0 accent-ink"
           />
           <span>
             I have read the{" "}

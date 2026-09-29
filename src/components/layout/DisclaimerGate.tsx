@@ -7,16 +7,28 @@ import { useEffect, useRef } from "react";
 
 const STORAGE_KEY = "disclaimer-accepted";
 
+// Acceptance is kept in a session cookie (shared by every tab until the browser
+// closes). sessionStorage is still honoured for tabs that accepted earlier.
 function hasAccepted() {
   try {
-    return sessionStorage.getItem(STORAGE_KEY) === "yes";
+    return document.cookie.split("; ").includes(`${STORAGE_KEY}=yes`) || sessionStorage.getItem(STORAGE_KEY) === "yes";
   } catch {
     return false;
   }
 }
 
+function remember() {
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${STORAGE_KEY}=yes; Path=/; SameSite=Lax${secure}`;
+  try {
+    sessionStorage.setItem(STORAGE_KEY, "yes");
+  } catch {
+    // Storage unavailable: the cookie alone is enough.
+  }
+}
+
 /**
- * Entry disclaimer shown once per browser session. The page content is still
+ * Entry disclaimer shown once per browser session (across tabs). The page content is still
  * rendered underneath, so search engines index the site normally.
  */
 export function DisclaimerGate() {
@@ -29,11 +41,7 @@ export function DisclaimerGate() {
   }, []);
 
   function accept() {
-    try {
-      sessionStorage.setItem(STORAGE_KEY, "yes");
-    } catch {
-      // Storage unavailable (private mode): the notice simply shows again next visit.
-    }
+    remember();
     dialogRef.current?.close();
   }
 

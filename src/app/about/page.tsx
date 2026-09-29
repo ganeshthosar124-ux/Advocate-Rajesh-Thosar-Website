@@ -47,7 +47,7 @@ export default function AboutPage() {
       />
 
       <Section tone="white" labelledBy="profile-title">
-        <div className="grid gap-16 lg:grid-cols-[0.9fr_1.4fr] lg:gap-24">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[0.9fr_1.4fr] lg:gap-24">
           <div className="lg:sticky lg:top-32 lg:self-start" data-reveal="left">
             <div className="mx-auto w-full max-w-sm px-4 lg:mx-0">
               <Portrait />
@@ -70,7 +70,7 @@ export default function AboutPage() {
             <dl className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
               {details.map(([k, v]) => (
                 <div key={k} className="bg-ivory p-6 sm:last:odd:col-span-2">
-                  <dt className="text-[0.7rem] font-bold tracking-[0.2em] text-brass-text uppercase">{k}</dt>
+                  <dt className="text-xs font-bold tracking-[0.2em] text-brass-text uppercase">{k}</dt>
                   <dd className="mt-2 font-medium text-ink">{v}</dd>
                 </div>
               ))}

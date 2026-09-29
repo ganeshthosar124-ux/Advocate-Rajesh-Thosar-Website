@@ -14,27 +14,53 @@ export function Effects() {
   const pathname = usePathname();
   const barRef = useRef<HTMLDivElement>(null);
 
-  // Reveal on scroll (re-scanned on every route change)
+  // Reveal on scroll. A MutationObserver picks up content inserted later
+  // (client-side navigation, back/forward restores), so nothing stays hidden.
   useEffect(() => {
-    const els = document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-visible)");
+    const reveal = (el: Element) => el.classList.add("is-visible");
     if (!("IntersectionObserver" in window)) {
-      els.forEach((el) => el.classList.add("is-visible"));
+      document.querySelectorAll("[data-reveal]").forEach(reveal);
       return;
     }
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
+          // Also reveal anything already above the viewport (e.g. after the
+          // browser restores a scroll position on Back), so scrolling up never
+          // shows empty space.
+          if (entry.isIntersecting || entry.boundingClientRect.bottom < 0) {
+            reveal(entry.target);
             io.unobserve(entry.target);
           }
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
     );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [pathname]);
+    const observed = new WeakSet<Element>();
+    const scan = () => {
+      const vh = window.innerHeight;
+      document.querySelectorAll("[data-reveal]:not(.is-visible)").forEach((el) => {
+        if (observed.has(el)) return;
+        observed.add(el);
+        // Only content that starts below the fold is hidden and animated in;
+        // anything already on screen (or scrolled past) is left untouched.
+        if (el.getBoundingClientRect().top < vh * 0.9) return reveal(el);
+        el.classList.add("reveal-pending");
+        io.observe(el);
+      });
+    };
+    scan();
+    let frame = 0;
+    const mo = new MutationObserver(() => {
+      if (!frame) frame = requestAnimationFrame(() => ((frame = 0), scan()));
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      mo.disconnect();
+      io.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, []);
 
   // Pointer-following spotlight
   useEffect(() => {

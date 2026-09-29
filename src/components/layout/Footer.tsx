@@ -10,7 +10,7 @@ const legalLinks = [
   { href: "/terms-of-use", label: "Terms of Use" },
 ];
 
-const heading = "font-sans text-[0.7rem] font-bold uppercase tracking-[0.24em] text-brass-light";
+const heading = "font-sans text-xs font-bold uppercase tracking-[0.24em] text-brass-light";
 const link = "inline-block py-1.5 transition-colors hover:text-ivory";
 
 export function Footer() {

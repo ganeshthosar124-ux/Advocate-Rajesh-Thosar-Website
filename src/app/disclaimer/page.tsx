@@ -6,7 +6,7 @@ import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Disclaimer",
-  description: `Disclaimer for the website of ${site.fullName}.`,
+  description: `Disclaimer for the website of ${site.fullName}, in keeping with the Bar Council of India rules on advertising and solicitation.`,
   path: "/disclaimer",
 });
 

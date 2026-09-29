@@ -19,7 +19,7 @@ export function Logo({ tone = "dark" }: { tone?: "dark" | "light" }) {
       />
       <span className="flex flex-col leading-none">
         <span className={`font-serif text-xl font-semibold sm:text-2xl ${name}`}>Rajesh A. Thosar</span>
-        <span className={`mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.28em] ${sub}`}>Advocate</span>
+        <span className={`mt-1 text-xs font-semibold uppercase tracking-[0.26em] ${sub}`}>Advocate</span>
       </span>
     </Link>
   );

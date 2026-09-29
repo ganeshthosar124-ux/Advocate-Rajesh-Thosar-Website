@@ -21,7 +21,7 @@ export default function CourtsPage() {
         crumbs={[{ name: "Courts", path: "/courts" }]}
       />
       <Section tone="white">
-        <div className="grid items-start gap-14 lg:grid-cols-[1.4fr_1fr] lg:gap-20">
+        <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-[1.4fr_1fr] lg:gap-20">
           <ol className="grid gap-4">
             {site.courts.map((court, i) => (
               <li

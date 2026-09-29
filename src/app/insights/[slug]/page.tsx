@@ -17,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const article = getArticle((await params).slug);
   if (!article) return {};
-  return pageMetadata({ title: article.title, description: article.summary, path: `/insights/${article.slug}` });
+  return pageMetadata({ title: article.title, description: article.summary, path: `/insights/${article.slug}`, type: "article" });
 }
 
 export default async function ArticlePage({ params }: Props) {

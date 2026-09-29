@@ -5,10 +5,14 @@ import { formatDate, getArticles } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 
+// Keep the page out of search results until there is something published.
+const hasPublished = getArticles().some((a) => !a.draft);
+
 export const metadata = pageMetadata({
   title: "Insights",
-  description: `Articles and legal updates by ${site.fullName}. For general information only.`,
+  description: `Articles and legal updates by ${site.fullName}, Advocate, Ulhasnagar. For general information only; not legal advice.`,
   path: "/insights",
+  noindex: !hasPublished,
 });
 
 export default function InsightsPage() {

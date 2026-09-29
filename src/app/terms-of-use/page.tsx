@@ -7,7 +7,7 @@ import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Terms of Use",
-  description: `Terms of use for the website of ${site.fullName}.`,
+  description: `Terms of use for the website of ${site.fullName}, Ulhasnagar: information only, no advocate–client relationship, and use of content.`,
   path: "/terms-of-use",
 });
 

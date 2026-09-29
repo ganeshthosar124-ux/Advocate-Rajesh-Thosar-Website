@@ -11,8 +11,16 @@ import { PracticeGrid } from "@/components/sections/PracticeGrid";
 import { CourthouseArt } from "@/components/sections/CourthouseArt";
 import { ContactPanel } from "@/components/sections/ContactPanel";
 import { formatDate, getArticles, getPracticeAreas } from "@/lib/content";
-import { personJsonLd } from "@/lib/seo";
+import { pageMetadata, personJsonLd } from "@/lib/seo";
 import { site } from "@/lib/site";
+
+export const metadata = pageMetadata({
+  title: `${site.name} | Advocate, ${site.office.city}, ${site.office.district}`,
+  absoluteTitle: true,
+  description: site.shortDescription,
+  path: "/",
+  type: "profile",
+});
 
 const steps = [
   { title: "Understanding the facts", text: "Review of the documents and the facts of the matter, and identification of the issues involved." },
@@ -49,7 +57,7 @@ export default function HomePage() {
           unoptimized
           className="pointer-events-none absolute -bottom-32 -left-32 hidden size-[30rem] opacity-[0.04] lg:block"
         />
-        <div className="grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
           <div data-reveal="left">
             <p className="eyebrow mb-5">Profile</p>
             <h2 id="profile-title">
@@ -125,7 +133,7 @@ export default function HomePage() {
 
       {/* Courts */}
       <Section tone="ink" labelledBy="courts-title">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
+        <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
           <div>
             <SectionHeading
               id="courts-title"

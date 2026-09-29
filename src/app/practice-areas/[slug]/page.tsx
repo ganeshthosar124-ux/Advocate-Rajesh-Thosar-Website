@@ -44,7 +44,7 @@ export default async function PracticeAreaPage({ params }: Props) {
       </PageHeader>
 
       <Section tone="white">
-        <div className="grid gap-14 lg:grid-cols-[1.6fr_1fr] lg:gap-20">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1.6fr_1fr] lg:gap-20">
           <div data-reveal>
             <div className="prose text-lg text-muted" dangerouslySetInnerHTML={{ __html: area.html }} />
             <p className="mt-12 max-w-[68ch] rounded-xl border border-line bg-ivory p-5 text-sm text-muted">

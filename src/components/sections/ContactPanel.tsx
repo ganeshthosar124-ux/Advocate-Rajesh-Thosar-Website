@@ -15,7 +15,7 @@ export function ContactPanel({ headingId = "contact-panel-title" }: { headingId?
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 -right-40 size-[480px] rounded-full bg-[radial-gradient(circle,rgba(197,160,89,0.25),transparent_65%)]"
       />
-      <div className="relative z-10 grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+      <div className="relative z-10 grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
         <div>
           <p className="eyebrow">Contact</p>
           <h2 id={headingId} className="mt-5">
@@ -33,26 +33,28 @@ export function ContactPanel({ headingId = "contact-panel-title" }: { headingId?
           </ul>
           <Link
             href="/contact"
-            className="group mt-10 inline-flex items-center gap-2 text-sm font-semibold text-brass-light"
+            className="group mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brass-light"
           >
             Enquiry form & map
             <ArrowIcon className="size-4 transition-transform duration-500 group-hover:translate-x-1.5" />
           </Link>
         </div>
-        <ul className="grid gap-4 self-center">
+        <ul className="grid min-w-0 grid-cols-1 gap-4 self-center">
           {tiles.map(({ href, label, value, Icon, external }) => (
-            <li key={label}>
+            <li key={label} className="min-w-0">
               <a
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="spotlight group flex items-center gap-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-5 transition-colors duration-500 hover:border-brass/50 sm:p-6"
               >
-                <span className="grid size-14 shrink-0 place-items-center rounded-full bg-brass text-ink-900 transition-transform duration-500 group-hover:scale-110">
+                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-brass sm:size-14 text-ink-900 transition-transform duration-500 group-hover:scale-110">
                   <Icon className="size-6" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[0.7rem] font-bold tracking-[0.2em] text-brass-light uppercase">{label}</span>
-                  <span className="mt-1 block truncate font-serif text-2xl text-ivory sm:text-3xl">{value}</span>
+                  <span className="block text-xs font-bold tracking-[0.2em] text-brass-light uppercase">{label}</span>
+                  <span className="mt-1 block font-serif text-xl [overflow-wrap:anywhere] text-ivory sm:text-2xl xl:text-[1.7rem]">
+                    {value}
+                  </span>
                 </span>
                 <ArrowIcon className="size-5 shrink-0 text-ivory/50 transition-all duration-500 group-hover:-rotate-45 group-hover:text-brass-light" />
                 {external && <span className="sr-only"> (opens in a new tab)</span>}

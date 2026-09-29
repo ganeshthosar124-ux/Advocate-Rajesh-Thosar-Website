@@ -11,6 +11,7 @@ export function MobileContactBar() {
   return (
     <nav
       aria-label="Quick contact"
+      data-quick-contact
       className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 overflow-hidden rounded-full border border-brass/30 bg-ink-900/90 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl lg:hidden"
     >
       <ul className="grid grid-cols-3 divide-x divide-white/10">

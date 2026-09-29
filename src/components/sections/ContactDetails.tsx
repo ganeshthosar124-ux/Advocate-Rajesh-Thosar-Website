@@ -18,7 +18,7 @@ function Item({
         <Icon />
       </span>
       <div className="min-w-0">
-        <p className="text-[0.7rem] font-bold tracking-[0.2em] text-brass-text uppercase">{label}</p>
+        <p className="text-xs font-bold tracking-[0.2em] text-brass-text uppercase">{label}</p>
         <div className="mt-1 text-ink">{children}</div>
       </div>
     </li>

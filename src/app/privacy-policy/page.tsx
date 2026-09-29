@@ -7,7 +7,7 @@ import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
-  description: `How the website of ${site.fullName} handles personal data.`,
+  description: `How the website of ${site.fullName} collects, uses and protects personal data submitted through its enquiry form.`,
   path: "/privacy-policy",
 });
 
@@ -31,7 +31,8 @@ export default function PrivacyPolicyPage() {
         </li>
       </ul>
       <p>
-        This website does not use advertising or tracking cookies. [If privacy-friendly analytics are enabled, name
+        This website does not use advertising or tracking cookies. It sets one functional cookie, which
+        remembers for the current browser session that you have accepted the disclaimer. [If privacy-friendly analytics are enabled, name
         the service here and state that it does not use cookies or identify individual visitors.]
       </p>
 

@@ -22,7 +22,7 @@ export default function ContactPage() {
         crumbs={[{ name: "Contact", path: "/contact" }]}
       />
       <Section tone="white" labelledBy="details-title">
-        <div className="grid gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+        <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
           <div className="space-y-6" data-reveal="left">
             <h2 id="details-title" className="text-4xl">
               Office details

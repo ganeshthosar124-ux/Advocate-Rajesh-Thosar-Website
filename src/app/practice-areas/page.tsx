@@ -8,7 +8,7 @@ import { site } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Practice Areas",
-  description: `Areas of practice of ${site.name}: civil, criminal, cheque dishonour, property and succession, banking and recovery, consumer, matrimonial, writ and regulatory matters.`,
+  description: `Practice areas of ${site.name}: civil, criminal, cheque dishonour, property, banking, consumer, family and writ matters in Maharashtra.`,
   path: "/practice-areas",
 });
 

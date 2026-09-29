@@ -15,9 +15,9 @@ export function Hero({ facts }: { facts: Fact[] }) {
         <div className="absolute bottom-[-30%] left-[-15%] size-[55vw] max-w-[800px] rounded-full bg-[radial-gradient(circle,rgba(40,80,150,0.35),transparent_65%)] motion-safe:animate-drift [animation-delay:-8s]" />
       </div>
 
-      <Container className="relative z-10 grid min-h-[100svh] items-center gap-14 pt-32 pb-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:pt-36">
+      <Container className="relative z-10 grid grid-cols-1 min-h-[100svh] items-center gap-14 pt-32 pb-20 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10 lg:pt-36">
         <div>
-          <p className="glass inline-flex items-center gap-3 rounded-full px-4 py-2 text-[0.72rem] font-semibold tracking-[0.18em] text-ivory/85 uppercase motion-safe:animate-fade-up">
+          <p className="glass inline-flex items-center gap-3 rounded-full px-4 py-2 text-xs font-semibold tracking-[0.18em] text-ivory/85 uppercase motion-safe:animate-fade-up">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full rounded-full bg-brass opacity-60 motion-safe:animate-ping" />
               <span className="relative inline-flex size-2 rounded-full bg-brass" />
@@ -59,7 +59,7 @@ export function Hero({ facts }: { facts: Fact[] }) {
           >
             {facts.map((f) => (
               <div key={f.label} className="flex flex-col-reverse px-3 first:pl-0 sm:px-4">
-                <dt className="mt-2 text-[0.62rem] font-semibold tracking-[0.12em] text-ivory/65 uppercase sm:text-[0.72rem] sm:tracking-[0.14em]">{f.label}</dt>
+                <dt className="mt-2 text-xs font-semibold tracking-[0.08em] text-ivory/70 uppercase sm:tracking-[0.14em]">{f.label}</dt>
                 <dd className="font-serif text-4xl leading-none text-brass-light sm:text-5xl">{f.value}</dd>
               </div>
             ))}
@@ -94,11 +94,11 @@ export function Hero({ facts }: { facts: Fact[] }) {
           </div>
 
           <div className="glass-dark absolute top-12 -left-4 hidden rounded-xl px-5 py-4 motion-safe:animate-float sm:-left-20 sm:block">
-            <p className="text-[0.68rem] font-semibold tracking-[0.18em] text-brass-light uppercase">Enrolled with</p>
+            <p className="text-xs font-semibold tracking-[0.18em] text-brass-light uppercase">Enrolled with</p>
             <p className="mt-1 font-serif text-lg leading-tight text-ivory">{site.barCouncil}</p>
           </div>
           <div className="glass-dark absolute -right-2 bottom-28 hidden rounded-xl px-5 py-4 motion-safe:animate-float [animation-delay:-3.5s] sm:-right-12 sm:block">
-            <p className="text-[0.68rem] font-semibold tracking-[0.18em] text-brass-light uppercase">Office hours</p>
+            <p className="text-xs font-semibold tracking-[0.18em] text-brass-light uppercase">Office hours</p>
             <p className="mt-1 text-sm font-semibold text-ivory">Mon – Sat · 10 am – 6 pm</p>
           </div>
         </div>

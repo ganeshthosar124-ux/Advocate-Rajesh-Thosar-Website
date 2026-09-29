@@ -4,27 +4,30 @@ import { headers } from "next/headers";
 import nodemailer from "nodemailer";
 import { contactSchema, type ContactFieldErrors, type ContactState } from "@/lib/contact-schema";
 
-// Simple per-IP rate limit (5 submissions / 10 minutes). In-memory, so it
-// resets on redeploy and is per-instance; adequate for a low-traffic site.
+// Simple per-IP rate limit (5 sends / 10 minutes). In-memory, so it resets on
+// redeploy and is per-instance; adequate for a low-traffic site. Visitors whose
+// IP is unknown are not grouped together, so one sender cannot block everyone.
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
 const hits = new Map<string, number[]>();
 
-function rateLimited(ip: string) {
+function rateLimited(ip: string | null) {
+  if (!ip) return false;
   const now = Date.now();
+  if (hits.size > 5000) for (const [k, v] of hits) if (v.every((t) => now - t >= WINDOW_MS)) hits.delete(k);
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   recent.push(now);
   hits.set(ip, recent);
   return recent.length > MAX_PER_WINDOW;
 }
 
-async function verifyTurnstile(token: string, ip: string) {
+async function verifyTurnstile(token: string, ip: string | null) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret) return true; // Turnstile not configured
   if (!token) return false;
   const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
-    body: new URLSearchParams({ secret, response: token, remoteip: ip }),
+    body: new URLSearchParams({ secret, response: token, ...(ip ? { remoteip: ip } : {}) }),
   });
   const data = (await res.json()) as { success?: boolean };
   return data.success === true;
@@ -34,24 +37,28 @@ function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
+const SENT = "Thank you. Your enquiry has been sent and the office will respond by email.";
+
 export async function sendEnquiry(_prev: ContactState, formData: FormData): Promise<ContactState> {
   // Honeypot: real visitors never see or fill this field.
-  if (formData.get("company")) return { status: "success", message: "Thank you. Your enquiry has been sent." };
+  // Answer exactly as for a real send so bots learn nothing.
+  if (formData.get("company")) return { status: "success", message: SENT };
 
   const h = await headers();
-  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (rateLimited(ip)) {
-    return { status: "error", message: "Too many enquiries were sent from your connection. Please try again later." };
-  }
+  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip")?.trim() || null;
 
-  const parsed = contactSchema.safeParse({
-    name: formData.get("name") ?? "",
-    email: formData.get("email") ?? "",
-    phone: formData.get("phone") ?? "",
-    subject: formData.get("subject") ?? "",
-    message: formData.get("message") ?? "",
-    consent: formData.get("consent") ?? "",
-  });
+  const text = (k: string) => String(formData.get(k) ?? "");
+  const values = {
+    name: text("name"),
+    email: text("email"),
+    phone: text("phone"),
+    subject: text("subject"),
+    message: text("message"),
+    consent: formData.get("consent") === "on",
+  };
+  const fail = (message: string, errors?: ContactFieldErrors): ContactState => ({ status: "error", message, errors, values });
+
+  const parsed = contactSchema.safeParse({ ...values, consent: formData.get("consent") ?? "" });
 
   if (!parsed.success) {
     const errors: ContactFieldErrors = {};
@@ -59,20 +66,22 @@ export async function sendEnquiry(_prev: ContactState, formData: FormData): Prom
       const key = issue.path[0] as keyof ContactFieldErrors;
       errors[key] ??= issue.message;
     }
-    return { status: "error", message: "Please correct the highlighted fields.", errors };
+    return fail("Please correct the highlighted fields.", errors);
+  }
+
+  // Counted only for valid submissions, so correcting typos never locks anyone out.
+  if (rateLimited(ip)) {
+    return fail("Too many enquiries were sent from your connection. Please try again later.");
   }
 
   if (!(await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""), ip))) {
-    return { status: "error", message: "The spam check failed. Please reload the page and try again." };
+    return fail("The spam check failed. Please reload the page and try again.");
   }
 
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, CONTACT_FROM, CONTACT_TO } = process.env;
   if (!SMTP_HOST || !CONTACT_TO) {
     console.warn("Contact form: SMTP_HOST / CONTACT_TO not configured; enquiry not sent.");
-    return {
-      status: "error",
-      message: "The enquiry form is not available at the moment. Please contact the office by telephone or email.",
-    };
+    return fail("The enquiry form is not available at the moment. Please contact the office by telephone or email.");
   }
 
   const d = parsed.data;
@@ -94,11 +103,8 @@ export async function sendEnquiry(_prev: ContactState, formData: FormData): Prom
     });
   } catch (err) {
     console.error("Contact form: failed to send email", err);
-    return {
-      status: "error",
-      message: "Your enquiry could not be sent. Please try again, or contact the office by telephone or email.",
-    };
+    return fail("Your enquiry could not be sent. Please try again, or contact the office by telephone or email.");
   }
 
-  return { status: "success", message: "Thank you. Your enquiry has been sent and the office will respond by email." };
+  return { status: "success", message: SENT };
 }

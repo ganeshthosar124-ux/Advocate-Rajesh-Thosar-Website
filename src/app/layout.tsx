@@ -12,7 +12,7 @@ import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["500", "600"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
   display: "swap",
@@ -32,13 +32,12 @@ export const metadata: Metadata = {
   },
   description: site.shortDescription,
   applicationName: site.fullName,
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_IN",
     siteName: site.fullName,
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"] },
   formatDetection: { telephone: false },
 };
 
@@ -52,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-dvh flex-col">
         <a
           href="#main"
+          data-skip-link
           className="sr-only z-[70] bg-brass px-4 py-3 font-semibold text-ink-900 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
         >
           Skip to main content
